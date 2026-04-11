@@ -24,9 +24,9 @@ const NEON = {
   violet: "#B24BF3",
   violetGlow: "#9C27B0",
   violetSoft: "#CE93D8",
-  textPrimary: "#F0E6FF",
-  textSecondary: "#9B8FB8",
-  textMuted: "#5D5478",
+  textPrimary: "#00E5FF", // Changed to solid neon cyan
+  textSecondary: "#FF2D95", // Changed to solid neon magenta
+  textMuted: "#B24BF3", // Changed to solid neon violet
   borderNeon: "rgba(178,75,243,0.2)",
   borderAmber: "rgba(255,140,0,0.2)",
   borderCyan: "rgba(0,229,255,0.15)",
@@ -195,11 +195,11 @@ const DB = {
 const COCKTAIL_IMAGES = {
   201: "https://images.unsplash.com/photo-1551538827-9c037cb4f32a?w=400&h=400&fit=crop",
   202: "https://images.unsplash.com/photo-1556855810-ac404aa91e85?w=400&h=400&fit=crop",
-  203: "https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=400&h=400&fit=crop",
-  204: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=400&h=400&fit=crop",
-  205: "https://images.unsplash.com/photo-1560512823-829485b8bf24?w=400&h=400&fit=crop",
-  206: "https://images.unsplash.com/photo-1587223962217-f4c4c7c0e5e7?w=400&h=400&fit=crop",
-  207: "https://images.unsplash.com/photo-1536935338788-846bb9981813?w=400&h=400&fit=crop",
+  203: "https://www.liquor.com/thmb/JT5euWxqUizzlChebR0Km8tZewY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Autumn_Rum_Old_Fashioned_Credit_Tim_Nusog_2000x2000_primary-502572bcaa2746109e0dc655b68eb16c.jpg",
+  204: "https://punchdrink.com/wp-content/uploads/2023/06/Article2-Nonalcoholic-Espresso-Martini.jpg?resize=600,825",
+  205: "https://cdn.diffordsguide.com/cocktail/rVQbYA/lifestyle/0/1024x.webp?v=1737701584",
+  206: "https://images.getrecipekit.com/20221214143801-aviation-cocktail-recipe.png?width=650&quality=90&",
+  207: "https://static01.nyt.com/images/2014/04/23/dining/Dark-n-Stormy/Dark-n-Stormy-jumbo.jpg?quality=75&auto=webp",
 };
 const COCKTAIL_EMOJIS = { 201: "🌿", 202: "🍋", 203: "🥃", 204: "☕", 205: "🍊", 206: "💜", 207: "⚡" };
 const FLAVOR_COLORS = { Sweet: NEON.amber, Sour: "#39FF14", Bitter: NEON.violet, Refreshing: NEON.cyan, Smoky: "#FF6347", Floral: NEON.magenta, Spicy: "#FF4500" };
@@ -238,15 +238,7 @@ function enrichCocktail(c) {
 function NeonBackground() {
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 0, overflow: "hidden", pointerEvents: "none" }}>
-      <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse at 20% 50%, ${NEON.amber}08 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, ${NEON.cyan}06 0%, transparent 50%), radial-gradient(ellipse at 50% 80%, ${NEON.magenta}06 0%, transparent 50%), ${NEON.bg}` }} />
-      <div style={{ position: "absolute", width: 600, height: 600, borderRadius: "50%", top: "-10%", left: "-10%", background: `radial-gradient(circle, ${NEON.amber}0A 0%, transparent 70%)`, animation: "orbFloat1 20s ease-in-out infinite", filter: "blur(60px)" }} />
-      <div style={{ position: "absolute", width: 500, height: 500, borderRadius: "50%", top: "30%", right: "-5%", background: `radial-gradient(circle, ${NEON.magenta}08 0%, transparent 70%)`, animation: "orbFloat2 25s ease-in-out infinite", filter: "blur(80px)" }} />
-      <div style={{ position: "absolute", width: 700, height: 700, borderRadius: "50%", bottom: "-15%", left: "30%", background: `radial-gradient(circle, ${NEON.cyan}06 0%, transparent 70%)`, animation: "orbFloat3 22s ease-in-out infinite", filter: "blur(70px)" }} />
-      <div style={{ position: "absolute", width: 400, height: 400, borderRadius: "50%", top: "60%", left: "10%", background: `radial-gradient(circle, ${NEON.violet}08 0%, transparent 70%)`, animation: "orbFloat1 18s ease-in-out infinite reverse", filter: "blur(50px)" }} />
-      {[8, 25, 72, 92].map((left, i) => (
-        <div key={i} style={{ position: "absolute", left: `${left}%`, top: 0, bottom: 0, width: 2, background: `linear-gradient(to bottom, transparent, ${[NEON.amber, NEON.cyan, NEON.magenta, NEON.violet][i]}15, transparent)`, animation: `neonPulse ${3 + i * 0.5}s ease-in-out infinite alternate` }} />
-      ))}
-      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "30%", background: `linear-gradient(to top, ${NEON.violet}06, ${NEON.magenta}04, transparent)` }} />
+      <div style={{ position: "absolute", inset: 0, background: `linear-gradient(135deg, #000428 0%, #004e92 100%)` }} />
     </div>
   );
 }
@@ -332,15 +324,15 @@ function AnalyticsDashboard({ cocktails }) {
         {[{ label: "Cocktails", value: cocktails.length, icon: "🍸", glow: NEON.cyan }, { label: "Avg Rating", value: (cocktails.filter(c => c.avgRating).reduce((s, c) => s + c.avgRating, 0) / cocktails.filter(c => c.avgRating).length).toFixed(1), icon: "⭐", glow: NEON.amber }, { label: "Reviews", value: DB.review.length, icon: "💬", glow: NEON.magenta }, { label: "Avg Ingredients", value: avgIngredients, icon: "🧪", glow: NEON.violet }].map((s, i) => (
           <div key={i} style={{ background: `linear-gradient(145deg, rgba(178,75,243,0.08), rgba(0,229,255,0.04))`, border: `1px solid ${NEON.borderNeon}`, borderRadius: 14, padding: "16px 14px", textAlign: "center", backdropFilter: "blur(8px)", boxShadow: `0 0 20px ${s.glow}10` }}>
             <div style={{ fontSize: 24, marginBottom: 4 }}>{s.icon}</div>
-            <div style={{ fontSize: 22, fontWeight: 700, color: s.glow, fontFamily: "'Playfair Display', serif", textShadow: `0 0 20px ${s.glow}40` }}>{s.value}</div>
+            <div style={{ fontSize: 22, fontWeight: 700, color: s.glow, fontFamily: "'Playfair Display', serif" }}>{s.value}</div>
             <div style={{ fontSize: 11, color: NEON.textSecondary, marginTop: 2 }}>{s.label}</div>
           </div>
         ))}
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 20 }}>
-        <div style={pnl}><div style={{ fontSize: 13, fontWeight: 600, color: NEON.cyan, marginBottom: 10, textShadow: `0 0 10px ${NEON.cyan}30` }}>Average Ratings</div><div ref={chartRef1} style={{ width: "100%" }} /></div>
+        <div style={pnl}><div style={{ fontSize: 13, fontWeight: 600, color: NEON.cyan, marginBottom: 10 }}>Average Ratings</div><div ref={chartRef1} style={{ width: "100%" }} /></div>
         <div style={{ ...pnl, display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <div style={{ fontSize: 13, fontWeight: 600, color: NEON.magenta, marginBottom: 10, alignSelf: "flex-start", textShadow: `0 0 10px ${NEON.magenta}30` }}>Flavor Distribution</div>
+          <div style={{ fontSize: 13, fontWeight: 600, color: NEON.magenta, marginBottom: 10, alignSelf: "flex-start" }}>Flavor Distribution</div>
           <div ref={chartRef2} />
           <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 8, justifyContent: "center" }}>
             {flavorData.map(f => (<span key={f.name} style={{ fontSize: 10, color: NEON.textSecondary, display: "flex", alignItems: "center", gap: 3 }}><span style={{ width: 8, height: 8, borderRadius: "50%", background: FLAVOR_COLORS[f.name], display: "inline-block", boxShadow: `0 0 6px ${FLAVOR_COLORS[f.name]}60` }} />{f.name}</span>))}
@@ -349,13 +341,13 @@ function AnalyticsDashboard({ cocktails }) {
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
         <div style={pnl}>
-          <div style={{ fontSize: 13, fontWeight: 600, color: NEON.amber, marginBottom: 10, textShadow: `0 0 10px ${NEON.amber}30` }}>Difficulty Breakdown</div>
+          <div style={{ fontSize: 13, fontWeight: 600, color: NEON.amber, marginBottom: 10 }}>Difficulty Breakdown</div>
           <div style={{ display: "flex", gap: 12 }}>
-            {Object.entries(diffSplit).map(([key, val]) => (<div key={key} style={{ flex: 1, textAlign: "center" }}><div style={{ fontSize: 28, fontWeight: 700, color: DIFFICULTY_COLORS[key], fontFamily: "'Playfair Display', serif", textShadow: `0 0 20px ${DIFFICULTY_COLORS[key]}40` }}>{val}</div><div style={{ fontSize: 11, color: NEON.textSecondary }}>{key}</div><div style={{ height: 6, borderRadius: 3, marginTop: 6, background: `${DIFFICULTY_COLORS[key]}15` }}><div style={{ height: "100%", borderRadius: 3, background: DIFFICULTY_COLORS[key], width: `${(val / cocktails.length) * 100}%`, boxShadow: `0 0 8px ${DIFFICULTY_COLORS[key]}60` }} /></div></div>))}
+            {Object.entries(diffSplit).map(([key, val]) => (<div key={key} style={{ flex: 1, textAlign: "center" }}><div style={{ fontSize: 28, fontWeight: 700, color: DIFFICULTY_COLORS[key], fontFamily: "'Playfair Display', serif" }}>{val}</div><div style={{ fontSize: 11, color: NEON.textSecondary }}>{key}</div><div style={{ height: 6, borderRadius: 3, marginTop: 6, background: `${DIFFICULTY_COLORS[key]}15` }}><div style={{ height: "100%", borderRadius: 3, background: DIFFICULTY_COLORS[key], width: `${(val / cocktails.length) * 100}%`, boxShadow: `0 0 8px ${DIFFICULTY_COLORS[key]}60` }} /></div></div>))}
           </div>
         </div>
         <div style={pnl}>
-          <div style={{ fontSize: 13, fontWeight: 600, color: NEON.violet, marginBottom: 10, textShadow: `0 0 10px ${NEON.violet}30` }}>Most-Used Tools</div>
+          <div style={{ fontSize: 13, fontWeight: 600, color: NEON.violet, marginBottom: 10 }}>Most-Used Tools</div>
           {toolData.slice(0, 5).map(t => (<div key={t.name} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}><span style={{ fontSize: 14, width: 20, textAlign: "center" }}>{TOOL_ICONS[t.name] || "🔧"}</span><span style={{ flex: 1, fontSize: 12, color: NEON.textSecondary }}>{t.name}</span><div style={{ width: 60, height: 5, borderRadius: 3, background: `${NEON.violet}15` }}><div style={{ height: "100%", borderRadius: 3, background: NEON.violet, width: `${(t.count / toolData[0].count) * 100}%`, boxShadow: `0 0 6px ${NEON.violet}60` }} /></div><span style={{ fontSize: 11, color: NEON.textMuted, width: 16, textAlign: "right" }}>{t.count}</span></div>))}
         </div>
       </div>
@@ -383,7 +375,7 @@ function CocktailCard({ cocktail, onClick, isFavorited, onToggleFavorite, curren
         <div style={{ position: "absolute", inset: 0, background: `linear-gradient(to top, ${NEON.bg} 0%, ${NEON.bg}80 30%, transparent 70%)` }} />
         <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 1, background: `linear-gradient(90deg, transparent, ${neonAccent}40, transparent)` }} />
         <div style={{ position: "absolute", top: 10, right: 10 }}>
-          <span style={{ padding: "4px 12px", borderRadius: 20, fontSize: 10, fontWeight: 700, letterSpacing: "0.05em", background: `${DIFFICULTY_COLORS[cocktail.recipe.difficulty]}15`, color: DIFFICULTY_COLORS[cocktail.recipe.difficulty], border: `1px solid ${DIFFICULTY_COLORS[cocktail.recipe.difficulty]}40`, backdropFilter: "blur(12px)", textShadow: `0 0 8px ${DIFFICULTY_COLORS[cocktail.recipe.difficulty]}50` }}>{cocktail.recipe.difficulty.toUpperCase()}</span>
+          <span style={{ padding: "4px 12px", borderRadius: 20, fontSize: 10, fontWeight: 700, letterSpacing: "0.05em", background: `${DIFFICULTY_COLORS[cocktail.recipe.difficulty]}15`, color: DIFFICULTY_COLORS[cocktail.recipe.difficulty], border: `1px solid ${DIFFICULTY_COLORS[cocktail.recipe.difficulty]}40`, backdropFilter: "blur(12px)" }}>{cocktail.recipe.difficulty.toUpperCase()}</span>
         </div>
         {currentUser && <button onClick={e => { e.stopPropagation(); onToggleFavorite(); }} style={{ position: "absolute", top: 10, left: 10, background: "rgba(0,0,0,0.5)", border: `1px solid ${isFavorited ? NEON.magenta + "60" : "rgba(255,255,255,0.1)"}`, borderRadius: "50%", width: 34, height: 34, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", backdropFilter: "blur(12px)", boxShadow: isFavorited ? `0 0 12px ${NEON.magenta}40` : "none" }}><Heart size={16} fill={isFavorited ? NEON.magenta : "none"} color={isFavorited ? NEON.magenta : "#fff"} /></button>}
       </div>
@@ -394,7 +386,7 @@ function CocktailCard({ cocktail, onClick, isFavorited, onToggleFavorite, curren
         </div>
         <p style={{ margin: "0 0 10px", fontSize: 12, color: NEON.textSecondary, lineHeight: 1.5 }}>{cocktail.cocktail_description}</p>
         <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 10 }}>
-          {cocktail.flavors.map(f => (<span key={f.flavor_id} style={{ fontSize: 10, padding: "3px 9px", borderRadius: 12, background: `${FLAVOR_COLORS[f.flavor_name]}12`, color: FLAVOR_COLORS[f.flavor_name], border: `1px solid ${FLAVOR_COLORS[f.flavor_name]}25`, textShadow: `0 0 6px ${FLAVOR_COLORS[f.flavor_name]}30` }}>{FLAVOR_ICONS[f.flavor_name]} {f.flavor_name}</span>))}
+          {cocktail.flavors.map(f => (<span key={f.flavor_id} style={{ fontSize: 10, padding: "3px 9px", borderRadius: 12, background: `${FLAVOR_COLORS[f.flavor_name]}12`, color: FLAVOR_COLORS[f.flavor_name], border: `1px solid ${FLAVOR_COLORS[f.flavor_name]}25` }}>{FLAVOR_ICONS[f.flavor_name]} {f.flavor_name}</span>))}
         </div>
         <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ fontSize: 11, color: NEON.textMuted }}>{GLASS_ICONS[cocktail.glass.glass_type_name]} {cocktail.glass.glass_type_name}</span><span style={{ fontSize: 11, color: NEON.textMuted }}>{cocktail.ingredients.length} ingredients</span></div>
       </div>
