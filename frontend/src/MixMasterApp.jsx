@@ -281,9 +281,40 @@ function StarRating({ rating, size = 16, interactive = false, onChange }) {
   );
 }
 
-function AnalyticsDashboard({ cocktails }) {
+function AnalyticsDashboard({ cocktails, dataSource, currentUser }) {
   const chartRef1 = useRef(null);
   const chartRef2 = useRef(null);
+  const [apiStats, setApiStats] = useState(null);
+  const [favCount, setFavCount] = useState(null);
+
+  // Fetch analytics from backend (uses sp_get_cocktail_stats → fn_avg_rating + fn_cocktail_review_count)
+  useEffect(() => {
+    if (dataSource !== "api") return;
+    let ignore = false;
+    const load = async () => {
+      try {
+        const res = await fetch("/api/analytics/summary");
+        if (res.ok) { const data = await res.json(); if (!ignore) setApiStats(data); }
+      } catch { /* fall back to client-side */ }
+    };
+    load();
+    return () => { ignore = true; };
+  }, [dataSource, cocktails]);
+
+  // Fetch favorite count from backend (uses fn_user_favorite_count)
+  useEffect(() => {
+    if (dataSource !== "api" || !currentUser) { setFavCount(null); return; }
+    let ignore = false;
+    const load = async () => {
+      try {
+        const res = await fetch(`/api/analytics/user/${currentUser.user_id}/favorite-count`);
+        if (res.ok) { const data = await res.json(); if (!ignore) setFavCount(data.favorite_count); }
+      } catch { /* ignore */ }
+    };
+    load();
+    return () => { ignore = true; };
+  }, [dataSource, currentUser, cocktails]);
+
   const ratingData = cocktails.filter(c => c.avgRating !== null).map(c => ({ name: c.cocktail_name, rating: Math.round(c.avgRating * 10) / 10 })).sort((a, b) => b.rating - a.rating);
   const flavorFreq = {}; cocktails.forEach(c => c.flavors.forEach(f => { flavorFreq[f.flavor_name] = (flavorFreq[f.flavor_name] || 0) + 1; }));
   const flavorData = Object.entries(flavorFreq).map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count);
@@ -294,6 +325,11 @@ function AnalyticsDashboard({ cocktails }) {
   const toolData = Object.entries(toolFreq).map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count);
   const avgIngredients = (cocktails.reduce((s, c) => s + c.ingredients.length, 0) / cocktails.length).toFixed(1);
   const neonColors = [NEON.cyan, NEON.magenta, NEON.amber, NEON.violet, NEON.cyanSoft, NEON.magentaSoft, NEON.amberSoft];
+
+  // Use API stats if available, else compute client-side
+  const totalCocktails = apiStats ? apiStats.cocktail_count : cocktails.length;
+  const totalReviews = apiStats ? apiStats.review_count : cocktails.reduce((s, c) => s + (c.reviews?.length || 0), 0);
+  const overallAvg = apiStats ? apiStats.average_rating : (() => { const rated = cocktails.filter(c => c.avgRating); return rated.length ? (rated.reduce((s, c) => s + c.avgRating, 0) / rated.length).toFixed(1) : "—"; })();
 
   useEffect(() => {
     if (!chartRef1.current || !ratingData.length) return;
@@ -326,8 +362,15 @@ function AnalyticsDashboard({ cocktails }) {
   const pnl = { background: `linear-gradient(145deg, rgba(15,15,28,0.7), rgba(10,10,20,0.9))`, border: `1px solid ${NEON.borderNeon}`, borderRadius: 14, padding: 16, backdropFilter: "blur(8px)" };
   return (
     <div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: 12, marginBottom: 24 }}>
-        {[{ label: "Cocktails", value: cocktails.length, icon: "🍸", glow: NEON.cyan }, { label: "Avg Rating", value: (cocktails.filter(c => c.avgRating).reduce((s, c) => s + c.avgRating, 0) / cocktails.filter(c => c.avgRating).length).toFixed(1), icon: "⭐", glow: NEON.amber }, { label: "Reviews", value: DB.review.length, icon: "💬", glow: NEON.magenta }, { label: "Avg Ingredients", value: avgIngredients, icon: "🧪", glow: NEON.violet }].map((s, i) => (
+      {dataSource === "api" && <div style={{ marginBottom: 16, padding: "8px 14px", borderRadius: 10, fontSize: 11, background: `${NEON.cyan}08`, border: `1px solid ${NEON.cyan}20`, color: NEON.textSecondary, display: "flex", alignItems: "center", gap: 6 }}>🗄️ Stats powered by MySQL stored functions <span style={{ color: NEON.textMuted }}>(fn_avg_rating, fn_cocktail_review_count, sp_get_cocktail_stats)</span></div>}
+      <div style={{ display: "grid", gridTemplateColumns: `repeat(auto-fit, minmax(130px, 1fr))`, gap: 12, marginBottom: 24 }}>
+        {[
+          { label: "Cocktails", value: totalCocktails, icon: "🍸", glow: NEON.cyan },
+          { label: "Avg Rating", value: overallAvg, icon: "⭐", glow: NEON.amber },
+          { label: "Reviews", value: totalReviews, icon: "💬", glow: NEON.magenta },
+          { label: "Avg Ingredients", value: avgIngredients, icon: "🧪", glow: NEON.violet },
+          ...(favCount !== null ? [{ label: "My Favorites", value: favCount, icon: "❤️", glow: NEON.gold1 }] : []),
+        ].map((s, i) => (
           <div key={i} style={{ background: `linear-gradient(145deg, rgba(178,75,243,0.08), rgba(0,229,255,0.04))`, border: `1px solid ${NEON.borderNeon}`, borderRadius: 14, padding: "16px 14px", textAlign: "center", backdropFilter: "blur(8px)", boxShadow: `0 0 20px ${s.glow}10` }}>
             <div style={{ fontSize: 24, marginBottom: 4 }}>{s.icon}</div>
             <div style={{ fontSize: 22, fontWeight: 700, color: s.glow, fontFamily: "'Playfair Display', serif" }}>{s.value}</div>
@@ -503,6 +546,21 @@ export default function MixMasterApp() {
   const [cocktails, setCocktails] = useState(DB.cocktail.map(enrichCocktail)); const [dataSource, setDataSource] = useState("demo");
   const showToast = useCallback((message, type = "success") => { setToastMsg({ message, type, id: Date.now() }); }, []);
 
+  // ── Re-fetch cocktails from API (refreshes fn_avg_rating values after review changes) ──
+  const refreshCocktails = useCallback(async () => {
+    if (dataSource !== "api") return;
+    try {
+      const res = await fetch("/api/cocktails");
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          setCocktails(data.map(c => ({ ...c, image: c.image || COCKTAIL_IMAGES[c.cocktail_id], emoji: c.emoji || COCKTAIL_EMOJIS[c.cocktail_id] })));
+          setReviews(data.flatMap(c => c.reviews || []));
+        }
+      }
+    } catch { /* silent */ }
+  }, [dataSource]);
+
   // ── Load cocktails + users from API on mount ──
   useEffect(() => {
     let ignore = false;
@@ -651,6 +709,7 @@ export default function MixMasterApp() {
         const newReview = await response.json();
         setReviews(p => [...p, newReview]);
         showToast("Review submitted! 🍸");
+        refreshCocktails(); // Re-fetch to update fn_avg_rating values
       } catch (err) { showToast("Error submitting review: " + err.message, "error"); }
     } else {
       const newReview = { review_id: Date.now(), cocktail_id: cid, user_id: currentUser.user_id, rating, review_text: text, created_at: new Date().toISOString().split("T")[0] };
@@ -668,6 +727,7 @@ export default function MixMasterApp() {
     }
     setReviews(p => p.filter(r => r.review_id !== rid));
     showToast("Review deleted");
+    refreshCocktails(); // Re-fetch to update fn_avg_rating values
   };
 
   const editReview = async (rid, nr, nt) => {
@@ -686,6 +746,7 @@ export default function MixMasterApp() {
       setReviews(p => p.map(r => r.review_id === rid ? { ...r, rating: nr, review_text: nt } : r));
     }
     showToast("Review updated!");
+    refreshCocktails(); // Re-fetch to update fn_avg_rating values
   };
 
   const enrichedCocktails = useMemo(() => cocktails.map(c => { const lr = reviews.filter(r => r.cocktail_id === c.cocktail_id); const ar = lr.length ? (lr.reduce((s, r) => s + r.rating, 0) / lr.length) : null; return { ...c, reviews: lr, avgRating: ar }; }), [cocktails, reviews]);
@@ -748,6 +809,10 @@ export default function MixMasterApp() {
             <div style={{ textAlign: "center", padding: "48px 0 36px" }}>
               <h2 style={{ fontSize: 46, fontWeight: 800, margin: "0 0 14px", fontFamily: "'Playfair Display', serif", background: `linear-gradient(135deg, ${NEON.gold1} 0%, ${NEON.gold2} 20%, ${NEON.gold3} 40%, ${NEON.gold4} 60%, ${NEON.gold5} 80%, ${NEON.gold2} 100%)`, backgroundSize: "300% 100%", animation: "shimmer 5s ease infinite", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", filter: "drop-shadow(0 0 8px rgba(191,149,63,0.25))" }}>Discover Your Next Cocktail</h2>
               <p style={{ fontSize: 16, background: `linear-gradient(90deg, ${NEON.gold1}, ${NEON.gold2}, ${NEON.gold3}, ${NEON.gold4})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", maxWidth: 520, margin: "0 auto", filter: "drop-shadow(0 0 4px rgba(191,149,63,0.15))" }}>From timeless classics to adventurous new mixes — search, sip, and savor.</p>
+              <div style={{ marginTop: 14, display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 12px", borderRadius: 999, fontSize: 12, background: dataSource === "api" ? `${NEON.cyan}12` : `${NEON.amber}12`, color: dataSource === "api" ? NEON.cyan : NEON.amber, border: `1px solid ${dataSource === "api" ? NEON.cyan + "30" : NEON.amber + "30"}` }}>
+                <span>{dataSource === "api" ? "🟢" : "🟡"}</span>
+                {dataSource === "api" ? "Connected to localhost FastAPI + MySQL" : "Demo mode until backend is running"}
+              </div>
             </div>
             <div style={{ maxWidth: 620, margin: "0 auto 24px", position: "relative" }}>
               <Search size={18} style={{ position: "absolute", left: 18, top: "50%", transform: "translateY(-50%)", color: NEON.textMuted }} />
@@ -807,7 +872,7 @@ export default function MixMasterApp() {
           <div style={{ animation: "fadeIn 0.3s ease-out" }}>
             <h2 style={{ fontSize: 30, fontWeight: 700, margin: "0 0 8px", fontFamily: "'Playfair Display', serif", background: `linear-gradient(135deg, ${NEON.gold1}, ${NEON.gold2}, ${NEON.gold5})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>📊 MixMaster Analytics</h2>
             <p style={{ fontSize: 14, color: NEON.textMuted, margin: "0 0 24px" }}>Data-driven insights across our cocktail collection</p>
-            <AnalyticsDashboard cocktails={enrichedCocktails} />
+            <AnalyticsDashboard cocktails={enrichedCocktails} dataSource={dataSource} currentUser={currentUser} />
           </div>
         )}
       </main>
