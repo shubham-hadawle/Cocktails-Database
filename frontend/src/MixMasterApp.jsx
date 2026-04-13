@@ -627,7 +627,7 @@ function AuthModal({ mode, onClose, onLogin, onRegister }) {
 // MAIN APP
 // ============================================================
 export default function MixMasterApp() {
-  const [currentUser, setCurrentUser] = useState(null); const [page, setPage] = useState("home"); const [selectedCocktailId, setSelectedCocktailId] = useState(null);
+  const [currentUser, setCurrentUser] = useState(() => { try { const saved = sessionStorage.getItem("mixmaster_user"); return saved ? JSON.parse(saved) : null; } catch { return null; } }); const [page, setPage] = useState("home"); const [selectedCocktailId, setSelectedCocktailId] = useState(null);
   const [searchQuery, setSearchQuery] = useState(""); const [showFilters, setShowFilters] = useState(false); const [filterFlavors, setFilterFlavors] = useState([]); const [filterDifficulty, setFilterDifficulty] = useState("");
   const [filterLiquor, setFilterLiquor] = useState([]); const [filterIngCount, setFilterIngCount] = useState(""); const [sortBy, setSortBy] = useState("name"); const [showAuthModal, setShowAuthModal] = useState(null);
   const [reviews, setReviews] = useState([...DB.review]); const [favorites, setFavorites] = useState([...DB.user_favorite]); const [users, setUsers] = useState([...DB.app_user]); const [toastMsg, setToastMsg] = useState(null);
@@ -734,6 +734,7 @@ export default function MixMasterApp() {
         });
         if (!res.ok) return false;
         const user = await res.json();
+        sessionStorage.setItem("mixmaster_user", JSON.stringify(user));
         setCurrentUser(user); setShowAuthModal(null);
         showToast(`Welcome back, ${user.username}!`);
         return true;
@@ -741,7 +742,7 @@ export default function MixMasterApp() {
     }
     // Demo fallback
     const user = users.find(u => u.username === username && u.password_hash === password);
-    if (user) { setCurrentUser(user); setShowAuthModal(null); showToast(`Welcome back, ${user.username}!`); return true; }
+    if (user) { sessionStorage.setItem("mixmaster_user", JSON.stringify(user)); setCurrentUser(user); setShowAuthModal(null); showToast(`Welcome back, ${user.username}!`); return true; }
     return false;
   };
 
@@ -756,6 +757,7 @@ export default function MixMasterApp() {
         if (!res.ok) return false;
         const user = await res.json();
         setUsers(p => [...p, user]);
+        sessionStorage.setItem("mixmaster_user", JSON.stringify(user));
         setCurrentUser(user); setShowAuthModal(null);
         showToast(`Welcome to MixMaster, ${username}!`);
         return true;
@@ -764,11 +766,11 @@ export default function MixMasterApp() {
     // Demo fallback
     if (users.find(u => u.username === username || u.email === email)) return false;
     const nu = { user_id: Date.now(), username, email, password_hash: password, created_at: new Date().toISOString().split("T")[0] };
-    setUsers(p => [...p, nu]); setCurrentUser(nu); setShowAuthModal(null);
+    setUsers(p => [...p, nu]); sessionStorage.setItem("mixmaster_user", JSON.stringify(nu)); setCurrentUser(nu); setShowAuthModal(null);
     showToast(`Welcome to MixMaster, ${username}!`); return true;
   };
 
-  const handleLogout = () => { setCurrentUser(null); setFavorites([]); setPage("home"); showToast("Signed out successfully"); };
+  const handleLogout = () => { sessionStorage.removeItem("mixmaster_user"); setCurrentUser(null); setFavorites([]); setPage("home"); showToast("Signed out successfully"); };
 
   // ── Favorites (API-connected) ──
   const isFav = (cid) => currentUser && favorites.some(f => f.user_id === currentUser.user_id && f.cocktail_id === cid);
