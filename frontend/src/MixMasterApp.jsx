@@ -818,11 +818,12 @@ export default function MixMasterApp() {
 
       <footer style={{ borderTop: `1px solid ${NEON.borderNeon}`, padding: "20px 32px", textAlign: "center", fontSize: 12, color: NEON.textMuted, position: "relative", zIndex: 1, background: `linear-gradient(180deg, transparent, ${NEON.bg}80)` }}>
         <span style={{ fontFamily: "'Playfair Display', serif", background: `linear-gradient(135deg, ${NEON.gold1}, ${NEON.gold2}, ${NEON.gold5})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>MixMaster</span>
-        {" "} — CS5200 Database Management Systems · Northeastern University · PhamJHadawleS · 2026
+        {" "} — Created by - Shubham & Jess
       </footer>
 
       {showAuthModal && <AuthModal mode={showAuthModal} onClose={() => setShowAuthModal(null)} onLogin={handleLogin} onRegister={handleRegister} />}
       {toastMsg && <Toast key={toastMsg.id} message={toastMsg.message} type={toastMsg.type} onClose={() => setToastMsg(null)} />}
+      <div style={{ position: "fixed", bottom: 12, left: 16, zIndex: 50, fontSize: 10, fontFamily: "'Playfair Display', serif", letterSpacing: "0.05em", color: NEON.gold5, opacity: 0.45, pointerEvents: "none", userSelect: "none" }}>Created by — Shubham & Jess</div>
     </div>
   );
 }
