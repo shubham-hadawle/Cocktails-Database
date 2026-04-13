@@ -19,28 +19,16 @@ DELETE FROM tool;
 DELETE FROM app_user;
 
 -- ============================================================
--- 1. recipe (no FK dependencies)
--- ============================================================
-INSERT INTO recipe (recipe_id, instructions, difficulty) VALUES
-(101, 'Muddle mint leaves and sugar in a glass. Add lime juice, fill with crushed ice, pour in white rum, and top with soda water. Stir gently and garnish with a sprig of mint.', 'Simple'),
-(102, 'Combine tequila, lime juice, and triple sec in a shaker with ice. Shake vigorously, then strain into a salt-rimmed glass over fresh ice.', 'Simple'),
-(103, 'Stir bourbon, sugar syrup, and Angostura bitters with ice in a mixing glass until well chilled. Strain into a rocks glass over a large ice cube and garnish with an orange peel.', 'Simple'),
-(104, 'Shake vodka, coffee liqueur, and fresh espresso with ice until frothy. Double-strain into a chilled coupe glass and garnish with three coffee beans.', 'Complex'),
-(105, 'Dry-shake egg white, lemon juice, simple syrup, and bourbon. Add ice, shake again until very cold. Strain into a rocks glass, dash Angostura on the foam, and draw a design with a toothpick.', 'Complex'),
-(106, 'Combine gin, maraschino liqueur, fresh lime juice, and crème de violette in a shaker with ice. Shake and strain into a chilled cocktail glass. Garnish with a brandied cherry.', 'Complex'),
-(107, 'Build dark rum and ginger beer over ice in a tall glass. Squeeze in fresh lime juice, stir briefly, and garnish with a lime wheel and candied ginger.', 'Simple');
-
--- ============================================================
--- 2. tool (no FK dependencies)
+-- 1. tool (no FK dependencies)
 -- ============================================================
 INSERT INTO tool (tool_id, tool_name, tool_description, tool_image_url) VALUES
-(10, 'Cocktail Shaker',    'A three-piece Boston or cobbler shaker for mixing and chilling drinks.',  NULL),
-(20, 'Mixing Glass',       'A heavy-bottomed glass used for stirring spirit-forward cocktails.',       NULL),
-(30, 'Muddler',            'A wooden or metal rod used to crush herbs, fruit, and sugar.',             NULL),
-(40, 'Jigger',             'A double-ended measuring tool for precise pours (1 oz / 2 oz).',          NULL),
-(50, 'Hawthorne Strainer', 'A spring-loaded strainer that fits over a shaker or mixing glass.',        NULL),
-(60, 'Bar Spoon',          'A long-handled spoon for stirring and layering drinks.',                   NULL),
-(70, 'Fine Mesh Strainer', 'A small strainer used for double-straining to remove ice shards.',         NULL);
+(10, 'Cocktail Shaker',    'A three-piece Boston or cobbler shaker for mixing and chilling drinks.',  'tool_photos/shaker.jpeg'),
+(20, 'Mixing Glass',       'A heavy-bottomed glass used for stirring spirit-forward cocktails.',       'tool_photos/mixing_glass.jpeg'),
+(30, 'Muddler',            'A wooden or metal rod used to crush herbs, fruit, and sugar.',             'tool_photos/muddler.jpeg'),
+(40, 'Jigger',             'A double-ended measuring tool for precise pours (1 oz / 2 oz).',          'tool_photos/jigger.jpeg'),
+(50, 'Hawthorne Strainer', 'A spring-loaded strainer that fits over a shaker or mixing glass.',        'tool_photos/hawthorne_strainer.jpeg'),
+(60, 'Bar Spoon',          'A long-handled spoon for stirring and layering drinks.',                   'tool_photos/barspoon.png'),
+(70, 'Fine Mesh Strainer', 'A small strainer used for double-straining to remove ice shards.',         'tool_photos/mesh_strainer.jpeg');
 
 -- ============================================================
 -- 2. ingredient_type (no FK dependencies)
@@ -83,13 +71,13 @@ INSERT INTO ingredient (ingredient_id, ingredient_name, ingredient_description, 
 -- 4. glass_type (no FK dependencies)
 -- ============================================================
 INSERT INTO glass_type (glass_type_id, glass_type_name, glass_type_description, glass_type_image_url) VALUES
-(11, 'Highball',        'A tall, narrow glass for long mixed drinks.',                            NULL),
-(12, 'Rocks',           'A short, wide tumbler for spirit-forward drinks.',                       NULL),
-(13, 'Coupe',           'A stemmed bowl-shaped glass for elegant cocktails.',                     NULL),
-(14, 'Margarita Glass', 'A wide-rimmed glass designed for frozen and shaken margaritas.',         NULL),
-(15, 'Cocktail Glass',  'A classic V-shaped stemmed glass (martini style).',                      NULL),
-(16, 'Collins',         'An extra-tall glass for fizzy, refreshing drinks.',                      NULL),
-(17, 'Copper Mug',      'An insulated metal mug traditionally used for mules.',                   NULL);
+(11, 'Highball',        'A tall, narrow glass for long mixed drinks.',                            'glass_photos/highball.jpg'),
+(12, 'Rocks',           'A short, wide tumbler for spirit-forward drinks.',                       'glass_photos/rocks.png'),
+(13, 'Coupe',           'A stemmed bowl-shaped glass for elegant cocktails.',                     'glass_photos/coupe.jpeg'),
+(14, 'Margarita Glass', 'A wide-rimmed glass designed for frozen and shaken margaritas.',         'glass_photos/margarita.jpeg'),
+(15, 'Cocktail Glass',  'A classic V-shaped stemmed glass (martini style).',                      'glass_photos/martini.jpeg'),
+(16, 'Collins',         'An extra-tall glass for fizzy, refreshing drinks.',                      'glass_photos/collins.jpeg'),
+(17, 'Copper Mug',      'An insulated metal mug traditionally used for mules.',                   'glass_photos/copper_mug.jpeg');
 
 -- ============================================================
 -- 5. cocktail (instructions and difficulty now inline)
@@ -228,15 +216,14 @@ INSERT INTO user_favorite (favorite_id, user_id, cocktail_id) VALUES
 -- ============================================================
 -- SELECT * queries to view all populated tables
 -- ============================================================
-SELECT * FROM recipe;
 SELECT * FROM tool;
 SELECT * FROM ingredient_type;
 SELECT * FROM ingredient;
 SELECT * FROM glass_type;
 SELECT * FROM cocktail;
 SELECT * FROM flavor;
-SELECT * FROM recipe_tool;
-SELECT * FROM recipe_ingredient;
+SELECT * FROM cocktail_tool;
+SELECT * FROM cocktail_ingredient;
 SELECT * FROM cocktail_flavor;
 SELECT * FROM app_user;
 SELECT * FROM review;
