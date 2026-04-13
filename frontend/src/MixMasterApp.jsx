@@ -54,13 +54,13 @@ const DB = {
     { recipe_id: 107, instructions: "Build dark rum and ginger beer over ice in a tall glass. Squeeze in fresh lime juice, stir briefly, and garnish with a lime wheel and candied ginger.", difficulty: "Simple" },
   ],
   tool: [
-    { tool_id: 10, tool_name: "Cocktail Shaker", tool_description: "A three-piece Boston or cobbler shaker for mixing and chilling drinks." },
-    { tool_id: 20, tool_name: "Mixing Glass", tool_description: "A heavy-bottomed glass used for stirring spirit-forward cocktails." },
-    { tool_id: 30, tool_name: "Muddler", tool_description: "A wooden or metal rod used to crush herbs, fruit, and sugar." },
-    { tool_id: 40, tool_name: "Jigger", tool_description: "A double-ended measuring tool for precise pours (1 oz / 2 oz)." },
-    { tool_id: 50, tool_name: "Hawthorne Strainer", tool_description: "A spring-loaded strainer that fits over a shaker or mixing glass." },
-    { tool_id: 60, tool_name: "Bar Spoon", tool_description: "A long-handled spoon for stirring and layering drinks." },
-    { tool_id: 70, tool_name: "Fine Mesh Strainer", tool_description: "A small strainer used for double-straining to remove ice shards." },
+    { tool_id: 10, tool_name: "Cocktail Shaker", tool_description: "A three-piece Boston or cobbler shaker for mixing and chilling drinks.", tool_image_url: "tool_photos/shaker.jpeg" },
+    { tool_id: 20, tool_name: "Mixing Glass", tool_description: "A heavy-bottomed glass used for stirring spirit-forward cocktails.", tool_image_url: "tool_photos/mixing_glass.jpeg" },
+    { tool_id: 30, tool_name: "Muddler", tool_description: "A wooden or metal rod used to crush herbs, fruit, and sugar.", tool_image_url: "tool_photos/muddler.jpeg" },
+    { tool_id: 40, tool_name: "Jigger", tool_description: "A double-ended measuring tool for precise pours (1 oz / 2 oz).", tool_image_url: "tool_photos/jigger.jpeg" },
+    { tool_id: 50, tool_name: "Hawthorne Strainer", tool_description: "A spring-loaded strainer that fits over a shaker or mixing glass.", tool_image_url: "tool_photos/hawthorne_strainer.jpeg" },
+    { tool_id: 60, tool_name: "Bar Spoon", tool_description: "A long-handled spoon for stirring and layering drinks.", tool_image_url: "tool_photos/barspoon.png" },
+    { tool_id: 70, tool_name: "Fine Mesh Strainer", tool_description: "A small strainer used for double-straining to remove ice shards.", tool_image_url: "tool_photos/mesh_strainer.jpeg" },
   ],
   ingredient_type: [
     { ingred_type_id: 1, ingred_type_name: "Spirit" },
@@ -94,13 +94,13 @@ const DB = {
     { ingredient_id: 520, ingredient_name: "Egg White", ingred_type_id: 6 },
   ],
   glass_type: [
-    { glass_type_id: 11, glass_type_name: "Highball", glass_type_description: "A tall, narrow glass for long mixed drinks." },
-    { glass_type_id: 12, glass_type_name: "Rocks", glass_type_description: "A short, wide tumbler for spirit-forward drinks." },
-    { glass_type_id: 13, glass_type_name: "Coupe", glass_type_description: "A stemmed bowl-shaped glass for elegant cocktails." },
-    { glass_type_id: 14, glass_type_name: "Margarita Glass", glass_type_description: "A wide-rimmed glass for margaritas." },
-    { glass_type_id: 15, glass_type_name: "Cocktail Glass", glass_type_description: "A classic V-shaped stemmed glass (martini style)." },
-    { glass_type_id: 16, glass_type_name: "Collins", glass_type_description: "An extra-tall glass for fizzy, refreshing drinks." },
-    { glass_type_id: 17, glass_type_name: "Copper Mug", glass_type_description: "An insulated metal mug traditionally used for mules." },
+    { glass_type_id: 11, glass_type_name: "Highball", glass_type_description: "A tall, narrow glass for long mixed drinks.", glass_type_image_url: "glass_photos/highball.jpg" },
+    { glass_type_id: 12, glass_type_name: "Rocks", glass_type_description: "A short, wide tumbler for spirit-forward drinks.", glass_type_image_url: "glass_photos/rocks.png" },
+    { glass_type_id: 13, glass_type_name: "Coupe", glass_type_description: "A stemmed bowl-shaped glass for elegant cocktails.", glass_type_image_url: "glass_photos/coupe.jpeg" },
+    { glass_type_id: 14, glass_type_name: "Margarita Glass", glass_type_description: "A wide-rimmed glass for margaritas.", glass_type_image_url: "glass_photos/margarita.jpeg" },
+    { glass_type_id: 15, glass_type_name: "Cocktail Glass", glass_type_description: "A classic V-shaped stemmed glass (martini style).", glass_type_image_url: "glass_photos/martini.jpeg" },
+    { glass_type_id: 16, glass_type_name: "Collins", glass_type_description: "An extra-tall glass for fizzy, refreshing drinks.", glass_type_image_url: "glass_photos/collins.jpeg" },
+    { glass_type_id: 17, glass_type_name: "Copper Mug", glass_type_description: "An insulated metal mug traditionally used for mules.", glass_type_image_url: "glass_photos/copper_mug.jpeg" },
   ],
   cocktail: [
     { cocktail_id: 201, cocktail_name: "Mojito", cocktail_description: "A refreshing Cuban classic with rum, mint, and lime.", recipe_id: 101, glass_type_id: 11 },
@@ -211,8 +211,29 @@ const COCKTAIL_EMOJIS = { 201: "🌿", 202: "🍋", 203: "🥃", 204: "☕", 205
 const FLAVOR_COLORS = { Sweet: NEON.amber, Sour: "#39FF14", Bitter: NEON.violet, Refreshing: NEON.cyan, Smoky: "#FF6347", Floral: NEON.magenta, Spicy: "#FF4500" };
 const FLAVOR_ICONS = { Sweet: "🍯", Sour: "🍋", Bitter: "🫒", Refreshing: "❄️", Smoky: "🔥", Floral: "🌸", Spicy: "🌶️" };
 const GLASS_ICONS = { Highball: "🥤", Rocks: "🥃", Coupe: "🍸", "Margarita Glass": "🍹", "Cocktail Glass": "🍸", Collins: "🥤", "Copper Mug": "🫗" };
-const TOOL_ICONS = { "Cocktail Shaker": "🧊", "Mixing Glass": "🥃", Muddler: "🪵", Jigger: "📏", "Hawthorne Strainer": "🔧", "Bar Spoon": "🥄", "Fine Mesh Strainer": "🔬" };
+const GLASS_IMAGES = {
+  Highball: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=240&h=240&fit=crop",
+  Rocks: "https://images.unsplash.com/photo-1575023782549-62ca0d244b39?w=240&h=240&fit=crop",
+  Coupe: "https://images.unsplash.com/photo-1530991808291-7e157454758c?w=240&h=240&fit=crop",
+  "Margarita Glass": "https://images.unsplash.com/photo-1551538827-9c037cb4f32a?w=240&h=240&fit=crop",
+  "Cocktail Glass": "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=240&h=240&fit=crop",
+  Collins: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=240&h=240&fit=crop",
+  "Copper Mug": "https://images.unsplash.com/photo-1523371054106-bbf80586c38c?w=240&h=240&fit=crop",
+};
+const TOOL_IMAGES = {
+  "Cocktail Shaker": "https://images.unsplash.com/photo-1514361892635-6f5d7de0bca2?w=240&h=240&fit=crop",
+  "Mixing Glass": "https://images.unsplash.com/photo-1541976076758-347942db1978?w=240&h=240&fit=crop",
+  Muddler: "https://images.unsplash.com/photo-1595977437232-9d6b7b65c8ef?w=240&h=240&fit=crop",
+  Jigger: "https://images.unsplash.com/photo-1563223771-375783ee91ad?w=240&h=240&fit=crop",
+  "Hawthorne Strainer": "https://images.unsplash.com/photo-1551024709-8f23befc6cf7?w=240&h=240&fit=crop",
+  "Bar Spoon": "https://images.unsplash.com/photo-1572116469696-31de0f17cc34?w=240&h=240&fit=crop",
+  "Fine Mesh Strainer": "https://images.unsplash.com/photo-1582106245687-cbb466a9f07f?w=240&h=240&fit=crop",
+};
 const DIFFICULTY_COLORS = { Simple: "#39FF14", Complex: NEON.amber };
+const DIFFICULTY_HINTS = {
+  Simple: "simply mix ingredients",
+  Complex: "requires a specific sequence of steps",
+};
 const CARD_GLOWS = [
   `linear-gradient(135deg, ${NEON.amber}44, ${NEON.magenta}44)`,
   `linear-gradient(135deg, ${NEON.cyan}44, ${NEON.violet}44)`,
@@ -222,6 +243,12 @@ const CARD_GLOWS = [
   `linear-gradient(135deg, ${NEON.cyan}44, ${NEON.magenta}44)`,
   `linear-gradient(135deg, ${NEON.magenta}44, ${NEON.violet}44)`,
 ];
+
+function normalizeAssetUrl(path) {
+  if (!path) return null;
+  if (path.startsWith("http://") || path.startsWith("https://") || path.startsWith("/")) return path;
+  return `/${path}`;
+}
 
 function enrichCocktail(c) {
   const recipe = DB.recipe.find(r => r.recipe_id === c.recipe_id);
@@ -281,41 +308,110 @@ function StarRating({ rating, size = 16, interactive = false, onChange }) {
   );
 }
 
-function AnalyticsDashboard({ cocktails, dataSource, currentUser }) {
+function ToolChip({ tool }) {
+  const [hovered, setHovered] = useState(false);
+  const image = normalizeAssetUrl(tool.tool_image_url) || TOOL_IMAGES[tool.tool_name];
+  const widePreviewTools = new Set(["Muddler", "Fine Mesh Strainer", "Hawthorne Strainer"]);
+  const isWidePreview = widePreviewTools.has(tool.tool_name);
+  const imageStyle = isWidePreview
+    ? { width: 180, height: "auto", display: "block" }
+    : { width: 120, height: 120, objectFit: "cover", display: "block" };
+
+  return (
+    <span
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{ position: "relative", padding: "7px 14px", borderRadius: 12, fontSize: 12, background: `${NEON.magenta}08`, border: `1px solid ${NEON.magenta}20`, color: NEON.magentaSoft, display: "flex", alignItems: "center", gap: 5, cursor: "default" }}
+    >
+      {tool.tool_name}
+      {hovered && image && (
+        <span style={{ position: "absolute", top: "calc(100% + 8px)", left: "50%", transform: "translateX(-50%)", zIndex: 200, borderRadius: 10, overflow: "hidden", border: `1px solid ${NEON.magenta}45`, background: NEON.bgCard, boxShadow: `0 12px 30px rgba(0,0,0,0.45), 0 0 18px ${NEON.magenta}30` }}>
+          <img src={image} alt={tool.tool_name} style={imageStyle} />
+        </span>
+      )}
+    </span>
+  );
+}
+
+function DifficultyChip({ difficulty, selected = false, onClick = null, uppercase = false }) {
+  const [hovered, setHovered] = useState(false);
+  const isButton = typeof onClick === "function";
+  const label = uppercase ? difficulty.toUpperCase() : difficulty;
+  const hint = DIFFICULTY_HINTS[difficulty];
+
+  const style = isButton
+    ? {
+        padding: "4px 12px",
+        borderRadius: 8,
+        fontSize: 11,
+        cursor: "pointer",
+        fontFamily: "'Outfit', sans-serif",
+        background: selected ? `${DIFFICULTY_COLORS[difficulty]}18` : "rgba(255,255,255,0.03)",
+        border: `1px solid ${selected ? DIFFICULTY_COLORS[difficulty] + "50" : NEON.borderNeon}`,
+        color: selected ? DIFFICULTY_COLORS[difficulty] : NEON.textMuted,
+      }
+    : {
+        padding: "5px 16px",
+        borderRadius: 20,
+        fontSize: 12,
+        fontWeight: 700,
+        letterSpacing: "0.05em",
+        background: `${DIFFICULTY_COLORS[difficulty]}15`,
+        color: DIFFICULTY_COLORS[difficulty],
+        border: `1px solid ${DIFFICULTY_COLORS[difficulty]}40`,
+        textShadow: `0 0 8px ${DIFFICULTY_COLORS[difficulty]}40`,
+      };
+
+  return (
+    <span
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{ position: "relative", display: "inline-flex", alignItems: "center" }}
+    >
+      {isButton ? (
+        <button onClick={onClick} style={style}>{label}</button>
+      ) : (
+        <span style={style}>{label}</span>
+      )}
+      {hovered && hint && (
+        <span style={{ position: "absolute", top: "calc(100% + 8px)", left: "50%", transform: "translateX(-50%)", zIndex: 220, minWidth: 190, maxWidth: 240, textAlign: "center", padding: "8px 10px", fontSize: 11, lineHeight: 1.3, borderRadius: 10, color: NEON.textPrimary, background: NEON.bgCard, border: `1px solid ${DIFFICULTY_COLORS[difficulty]}50`, boxShadow: `0 10px 24px rgba(0,0,0,0.45), 0 0 14px ${DIFFICULTY_COLORS[difficulty]}30` }}>
+          {hint}
+        </span>
+      )}
+    </span>
+  );
+}
+
+function GlassChip({ glassName, glassImageUrl, prefix = "", color = NEON.textMuted, fontSize = 11, fontWeight = 400 }) {
+  const [hovered, setHovered] = useState(false);
+  const image = normalizeAssetUrl(glassImageUrl) || GLASS_IMAGES[glassName];
+  const glassImageStyle = { width: 140, height: "auto", display: "block" };
+
+  return (
+    <span
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{ position: "relative", fontSize, color, fontWeight, display: "inline-flex", alignItems: "center", gap: 4, cursor: "default" }}
+    >
+      {GLASS_ICONS[glassName]} {prefix}{glassName}
+      {hovered && image && (
+        <span style={{ position: "absolute", top: "calc(100% + 8px)", left: "50%", transform: "translateX(-50%)", zIndex: 200, borderRadius: 10, overflow: "hidden", border: `1px solid ${NEON.cyan}45`, background: NEON.bgCard, boxShadow: `0 12px 30px rgba(0,0,0,0.45), 0 0 18px ${NEON.cyan}25` }}>
+          <img src={image} alt={glassName} style={glassImageStyle} />
+        </span>
+      )}
+    </span>
+  );
+}
+
+function AnalyticsDashboard({ cocktails, analyticsSummary }) {
   const chartRef1 = useRef(null);
   const chartRef2 = useRef(null);
-  const [apiStats, setApiStats] = useState(null);
-  const [favCount, setFavCount] = useState(null);
-
-  // Fetch analytics from backend (uses sp_get_cocktail_stats → fn_avg_rating + fn_cocktail_review_count)
-  useEffect(() => {
-    if (dataSource !== "api") return;
-    let ignore = false;
-    const load = async () => {
-      try {
-        const res = await fetch("/api/analytics/summary");
-        if (res.ok) { const data = await res.json(); if (!ignore) setApiStats(data); }
-      } catch { /* fall back to client-side */ }
-    };
-    load();
-    return () => { ignore = true; };
-  }, [dataSource, cocktails]);
-
-  // Fetch favorite count from backend (uses fn_user_favorite_count)
-  useEffect(() => {
-    if (dataSource !== "api" || !currentUser) { setFavCount(null); return; }
-    let ignore = false;
-    const load = async () => {
-      try {
-        const res = await fetch(`/api/analytics/user/${currentUser.user_id}/favorite-count`);
-        if (res.ok) { const data = await res.json(); if (!ignore) setFavCount(data.favorite_count); }
-      } catch { /* ignore */ }
-    };
-    load();
-    return () => { ignore = true; };
-  }, [dataSource, currentUser, cocktails]);
-
-  const ratingData = cocktails.filter(c => c.avgRating !== null).map(c => ({ name: c.cocktail_name, rating: Math.round(c.avgRating * 10) / 10 })).sort((a, b) => b.rating - a.rating);
+  const ratingData = (analyticsSummary?.per_cocktail?.length
+    ? analyticsSummary.per_cocktail
+        .filter(c => c.avg_rating !== null)
+        .map(c => ({ name: c.cocktail_name, rating: Math.round(Number(c.avg_rating) * 10) / 10 }))
+    : cocktails.filter(c => c.avgRating !== null).map(c => ({ name: c.cocktail_name, rating: Math.round(c.avgRating * 10) / 10 }))
+  ).sort((a, b) => b.rating - a.rating);
   const flavorFreq = {}; cocktails.forEach(c => c.flavors.forEach(f => { flavorFreq[f.flavor_name] = (flavorFreq[f.flavor_name] || 0) + 1; }));
   const flavorData = Object.entries(flavorFreq).map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count);
   const typeFreq = {}; cocktails.forEach(c => c.ingredients.forEach(i => { typeFreq[i.type] = (typeFreq[i.type] || 0) + 1; }));
@@ -324,12 +420,11 @@ function AnalyticsDashboard({ cocktails, dataSource, currentUser }) {
   const toolFreq = {}; cocktails.forEach(c => c.tools.forEach(t => { toolFreq[t.tool_name] = (toolFreq[t.tool_name] || 0) + 1; }));
   const toolData = Object.entries(toolFreq).map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count);
   const avgIngredients = (cocktails.reduce((s, c) => s + c.ingredients.length, 0) / cocktails.length).toFixed(1);
+  const fallbackRatings = cocktails.filter(c => c.avgRating !== null);
+  const averageRating = analyticsSummary?.average_rating ?? (fallbackRatings.length ? (fallbackRatings.reduce((s, c) => s + c.avgRating, 0) / fallbackRatings.length).toFixed(1) : "-");
+  const reviewCount = analyticsSummary?.review_count ?? cocktails.reduce((sum, c) => sum + (c.reviews?.length || 0), 0);
+  const cocktailCount = analyticsSummary?.cocktail_count ?? cocktails.length;
   const neonColors = [NEON.cyan, NEON.magenta, NEON.amber, NEON.violet, NEON.cyanSoft, NEON.magentaSoft, NEON.amberSoft];
-
-  // Use API stats if available, else compute client-side
-  const totalCocktails = apiStats ? apiStats.cocktail_count : cocktails.length;
-  const totalReviews = apiStats ? apiStats.review_count : cocktails.reduce((s, c) => s + (c.reviews?.length || 0), 0);
-  const overallAvg = apiStats ? apiStats.average_rating : (() => { const rated = cocktails.filter(c => c.avgRating); return rated.length ? (rated.reduce((s, c) => s + c.avgRating, 0) / rated.length).toFixed(1) : "—"; })();
 
   useEffect(() => {
     if (!chartRef1.current || !ratingData.length) return;
@@ -362,15 +457,8 @@ function AnalyticsDashboard({ cocktails, dataSource, currentUser }) {
   const pnl = { background: `linear-gradient(145deg, rgba(15,15,28,0.7), rgba(10,10,20,0.9))`, border: `1px solid ${NEON.borderNeon}`, borderRadius: 14, padding: 16, backdropFilter: "blur(8px)" };
   return (
     <div>
-      {dataSource === "api" && <div style={{ marginBottom: 16, padding: "8px 14px", borderRadius: 10, fontSize: 11, background: `${NEON.cyan}08`, border: `1px solid ${NEON.cyan}20`, color: NEON.textSecondary, display: "flex", alignItems: "center", gap: 6 }}>🗄️ Stats powered by MySQL stored functions <span style={{ color: NEON.textMuted }}>(fn_avg_rating, fn_cocktail_review_count, sp_get_cocktail_stats)</span></div>}
-      <div style={{ display: "grid", gridTemplateColumns: `repeat(auto-fit, minmax(130px, 1fr))`, gap: 12, marginBottom: 24 }}>
-        {[
-          { label: "Cocktails", value: totalCocktails, icon: "🍸", glow: NEON.cyan },
-          { label: "Avg Rating", value: overallAvg, icon: "⭐", glow: NEON.amber },
-          { label: "Reviews", value: totalReviews, icon: "💬", glow: NEON.magenta },
-          { label: "Avg Ingredients", value: avgIngredients, icon: "🧪", glow: NEON.violet },
-          ...(favCount !== null ? [{ label: "My Favorites", value: favCount, icon: "❤️", glow: NEON.gold1 }] : []),
-        ].map((s, i) => (
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: 12, marginBottom: 24 }}>
+        {[{ label: "Cocktails", value: cocktailCount, icon: "🍸", glow: NEON.cyan }, { label: "Avg Rating", value: averageRating, icon: "⭐", glow: NEON.amber }, { label: "Reviews", value: reviewCount, icon: "💬", glow: NEON.magenta }, { label: "Avg Ingredients", value: avgIngredients, icon: "🧪", glow: NEON.violet }].map((s, i) => (
           <div key={i} style={{ background: `linear-gradient(145deg, rgba(178,75,243,0.08), rgba(0,229,255,0.04))`, border: `1px solid ${NEON.borderNeon}`, borderRadius: 14, padding: "16px 14px", textAlign: "center", backdropFilter: "blur(8px)", boxShadow: `0 0 20px ${s.glow}10` }}>
             <div style={{ fontSize: 24, marginBottom: 4 }}>{s.icon}</div>
             <div style={{ fontSize: 22, fontWeight: 700, color: s.glow, fontFamily: "'Playfair Display', serif" }}>{s.value}</div>
@@ -397,7 +485,7 @@ function AnalyticsDashboard({ cocktails, dataSource, currentUser }) {
         </div>
         <div style={pnl}>
           <div style={{ fontSize: 13, fontWeight: 600, color: NEON.violet, marginBottom: 10 }}>Most-Used Tools</div>
-          {toolData.slice(0, 5).map(t => (<div key={t.name} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}><span style={{ fontSize: 14, width: 20, textAlign: "center" }}>{TOOL_ICONS[t.name] || "🔧"}</span><span style={{ flex: 1, fontSize: 12, color: NEON.textSecondary }}>{t.name}</span><div style={{ width: 60, height: 5, borderRadius: 3, background: `${NEON.violet}15` }}><div style={{ height: "100%", borderRadius: 3, background: NEON.violet, width: `${(t.count / toolData[0].count) * 100}%`, boxShadow: `0 0 6px ${NEON.violet}60` }} /></div><span style={{ fontSize: 11, color: NEON.textMuted, width: 16, textAlign: "right" }}>{t.count}</span></div>))}
+          {toolData.slice(0, 5).map(t => (<div key={t.name} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}><span style={{ flex: 1, fontSize: 12, color: NEON.textSecondary }}>{t.name}</span><div style={{ width: 60, height: 5, borderRadius: 3, background: `${NEON.violet}15` }}><div style={{ height: "100%", borderRadius: 3, background: NEON.violet, width: `${(t.count / toolData[0].count) * 100}%`, boxShadow: `0 0 6px ${NEON.violet}60` }} /></div><span style={{ fontSize: 11, color: NEON.textMuted, width: 16, textAlign: "right" }}>{t.count}</span></div>))}
         </div>
       </div>
       <div style={{ marginTop: 16, ...pnl }}>
@@ -437,7 +525,7 @@ function CocktailCard({ cocktail, onClick, isFavorited, onToggleFavorite, curren
         <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 10 }}>
           {cocktail.flavors.map(f => (<span key={f.flavor_id} style={{ fontSize: 10, padding: "3px 9px", borderRadius: 12, background: `${FLAVOR_COLORS[f.flavor_name]}12`, color: FLAVOR_COLORS[f.flavor_name], border: `1px solid ${FLAVOR_COLORS[f.flavor_name]}25` }}>{FLAVOR_ICONS[f.flavor_name]} {f.flavor_name}</span>))}
         </div>
-        <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ fontSize: 11, color: NEON.textMuted }}>{GLASS_ICONS[cocktail.glass.glass_type_name]} {cocktail.glass.glass_type_name}</span><span style={{ fontSize: 11, color: NEON.textMuted }}>{cocktail.ingredients.length} ingredients</span></div>
+        <div style={{ display: "flex", justifyContent: "space-between" }}><GlassChip glassName={cocktail.glass.glass_type_name} glassImageUrl={cocktail.glass.glass_type_image_url} /><span style={{ fontSize: 11, color: NEON.textMuted }}>{cocktail.ingredients.length} ingredients</span></div>
       </div>
     </div>
   );
@@ -461,18 +549,18 @@ function CocktailDetail({ cocktail, onBack, currentUser, onToggleFavorite, isFav
             {!imgError ? <img src={cocktail.image} alt={cocktail.cocktail_name} onError={() => setImgError(true)} style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 120, background: `linear-gradient(135deg, ${NEON.violet}15, ${NEON.bg})` }}>{cocktail.emoji}</div>}
             {currentUser && <button onClick={onToggleFavorite} style={{ position: "absolute", top: 16, right: 16, background: "rgba(0,0,0,0.6)", border: `1px solid ${isFavorited ? NEON.magenta + "60" : "rgba(255,255,255,0.1)"}`, borderRadius: "50%", width: 48, height: 48, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", backdropFilter: "blur(12px)", boxShadow: isFavorited ? `0 0 20px ${NEON.magenta}40` : "none" }}><Heart size={24} fill={isFavorited ? NEON.magenta : "none"} color={isFavorited ? NEON.magenta : "#fff"} /></button>}
           </div>
-          <div style={{ ...pnl, marginTop: 16 }}><div style={{ fontSize: 13, fontWeight: 600, color: NEON.cyan, marginBottom: 8 }}>{GLASS_ICONS[cocktail.glass.glass_type_name]} Served in: {cocktail.glass.glass_type_name}</div><div style={{ fontSize: 12, color: NEON.textSecondary }}>{cocktail.glass.glass_type_description}</div></div>
+          <div style={{ ...pnl, marginTop: 16 }}><div style={{ marginBottom: 8 }}><GlassChip glassName={cocktail.glass.glass_type_name} glassImageUrl={cocktail.glass.glass_type_image_url} prefix="Served in: " color={NEON.cyan} fontSize={13} fontWeight={600} /></div><div style={{ fontSize: 12, color: NEON.textSecondary }}>{cocktail.glass.glass_type_description}</div></div>
         </div>
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 4 }}>
             <h1 style={{ margin: 0, fontSize: 34, fontWeight: 700, fontFamily: "'Playfair Display', serif", background: `linear-gradient(135deg, ${NEON.gold1}, ${NEON.gold2}, ${NEON.gold3})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{cocktail.cocktail_name}</h1>
-            <span style={{ padding: "5px 16px", borderRadius: 20, fontSize: 12, fontWeight: 700, letterSpacing: "0.05em", background: `${DIFFICULTY_COLORS[cocktail.recipe.difficulty]}15`, color: DIFFICULTY_COLORS[cocktail.recipe.difficulty], border: `1px solid ${DIFFICULTY_COLORS[cocktail.recipe.difficulty]}40`, textShadow: `0 0 8px ${DIFFICULTY_COLORS[cocktail.recipe.difficulty]}40` }}>{cocktail.recipe.difficulty.toUpperCase()}</span>
+            <DifficultyChip difficulty={cocktail.recipe.difficulty} uppercase />
           </div>
           <p style={{ fontSize: 15, color: NEON.textSecondary, lineHeight: 1.6, margin: "8px 0 16px" }}>{cocktail.cocktail_description}</p>
           {cocktail.avgRating !== null && <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}><StarRating rating={cocktail.avgRating} size={18} /><span style={{ fontSize: 15, fontWeight: 600, color: NEON.star }}>{cocktail.avgRating.toFixed(1)}</span><span style={{ fontSize: 12, color: NEON.textMuted }}>({reviews.length} review{reviews.length !== 1 ? "s" : ""})</span></div>}
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 20 }}>{cocktail.flavors.map(f => (<span key={f.flavor_id} style={{ fontSize: 13, padding: "6px 16px", borderRadius: 20, background: `${FLAVOR_COLORS[f.flavor_name]}12`, color: FLAVOR_COLORS[f.flavor_name], border: `1px solid ${FLAVOR_COLORS[f.flavor_name]}30`, textShadow: `0 0 8px ${FLAVOR_COLORS[f.flavor_name]}40`, boxShadow: `0 0 12px ${FLAVOR_COLORS[f.flavor_name]}10` }}>{FLAVOR_ICONS[f.flavor_name]} {f.flavor_name}</span>))}</div>
           <div style={{ marginBottom: 20 }}><h3 style={{ fontSize: 16, fontWeight: 600, color: NEON.cyan, margin: "0 0 10px", fontFamily: "'Playfair Display', serif", textShadow: `0 0 10px ${NEON.cyan}25` }}>Ingredients</h3><div style={{ display: "flex", flexDirection: "column", gap: 6 }}>{cocktail.ingredients.map((ing, i) => (<div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 14px", background: `rgba(191,149,63,0.04)`, borderRadius: 10, border: `1px solid ${NEON.borderNeon}` }}><div style={{ display: "flex", alignItems: "center", gap: 8 }}><span style={{ fontSize: 10, padding: "2px 8px", borderRadius: 8, background: `${NEON.gold5}15`, color: NEON.gold2, border: `1px solid ${NEON.gold5}20` }}>{ing.type}</span><span style={{ fontSize: 14, color: NEON.textPrimary }}>{ing.name}</span></div><span style={{ fontSize: 13, color: NEON.gold1, fontWeight: 600, textShadow: `0 0 6px ${NEON.gold5}30` }}>{ing.quantity} {ing.unit}</span></div>))}</div></div>
-          {cocktail.tools.length > 0 && <div style={{ marginBottom: 20 }}><h3 style={{ fontSize: 16, fontWeight: 600, color: NEON.magenta, margin: "0 0 10px", fontFamily: "'Playfair Display', serif", textShadow: `0 0 10px ${NEON.magenta}25` }}>Tools Needed</h3><div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>{cocktail.tools.map(t => (<span key={t.tool_id} style={{ padding: "7px 14px", borderRadius: 12, fontSize: 12, background: `${NEON.magenta}08`, border: `1px solid ${NEON.magenta}20`, color: NEON.magentaSoft, display: "flex", alignItems: "center", gap: 5 }}>{TOOL_ICONS[t.tool_name]} {t.tool_name}</span>))}</div></div>}
+          {cocktail.tools.length > 0 && <div style={{ marginBottom: 20 }}><h3 style={{ fontSize: 16, fontWeight: 600, color: NEON.magenta, margin: "0 0 10px", fontFamily: "'Playfair Display', serif", textShadow: `0 0 10px ${NEON.magenta}25` }}>Tools Recommended</h3><div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>{cocktail.tools.map(t => (<ToolChip key={t.tool_id} tool={t} />))}</div></div>}
           <div><h3 style={{ fontSize: 16, fontWeight: 600, color: NEON.amber, margin: "0 0 10px", fontFamily: "'Playfair Display', serif", textShadow: `0 0 10px ${NEON.amber}25` }}>Preparation Instructions</h3><div style={{ padding: 18, borderRadius: 14, backdropFilter: "blur(8px)", background: `linear-gradient(145deg, ${NEON.amber}06, ${NEON.magenta}04)`, border: `1px solid ${NEON.borderAmber}`, borderLeft: `3px solid ${NEON.amber}`, boxShadow: `inset 0 0 30px ${NEON.amber}05` }}><p style={{ margin: 0, fontSize: 14, color: NEON.textSecondary, lineHeight: 1.9 }}>{cocktail.recipe.instructions}</p></div></div>
         </div>
       </div>
@@ -544,6 +632,7 @@ export default function MixMasterApp() {
   const [filterLiquor, setFilterLiquor] = useState([]); const [filterIngCount, setFilterIngCount] = useState(""); const [sortBy, setSortBy] = useState("name"); const [showAuthModal, setShowAuthModal] = useState(null);
   const [reviews, setReviews] = useState([...DB.review]); const [favorites, setFavorites] = useState([...DB.user_favorite]); const [users, setUsers] = useState([...DB.app_user]); const [toastMsg, setToastMsg] = useState(null);
   const [cocktails, setCocktails] = useState(DB.cocktail.map(enrichCocktail)); const [dataSource, setDataSource] = useState("demo");
+  const [analyticsSummary, setAnalyticsSummary] = useState(null);
   const showToast = useCallback((message, type = "success") => { setToastMsg({ message, type, id: Date.now() }); }, []);
 
   // ── Re-fetch cocktails from API (refreshes fn_avg_rating values after review changes) ──
@@ -554,7 +643,15 @@ export default function MixMasterApp() {
       if (res.ok) {
         const data = await res.json();
         if (Array.isArray(data) && data.length > 0) {
-          setCocktails(data.map(c => ({ ...c, image: c.image || COCKTAIL_IMAGES[c.cocktail_id], emoji: c.emoji || COCKTAIL_EMOJIS[c.cocktail_id] })));
+          setCocktails(data.map(c => ({
+            ...c,
+            tools: (c.tools || []).map(t => ({
+              ...t,
+              tool_image_url: normalizeAssetUrl(t.tool_image_url),
+            })),
+            image: c.image || COCKTAIL_IMAGES[c.cocktail_id],
+            emoji: c.emoji || COCKTAIL_EMOJIS[c.cocktail_id],
+          })));
           setReviews(data.flatMap(c => c.reviews || []));
         }
       }
@@ -576,6 +673,14 @@ export default function MixMasterApp() {
         if (!ignore && Array.isArray(cocktailData) && cocktailData.length > 0) {
           setCocktails(cocktailData.map(c => ({
             ...c,
+            glass: c.glass ? {
+              ...c.glass,
+              glass_type_image_url: normalizeAssetUrl(c.glass.glass_type_image_url),
+            } : c.glass,
+            tools: (c.tools || []).map(t => ({
+              ...t,
+              tool_image_url: normalizeAssetUrl(t.tool_image_url),
+            })),
             image: c.image || COCKTAIL_IMAGES[c.cocktail_id],
             emoji: c.emoji || COCKTAIL_EMOJIS[c.cocktail_id],
           })));
@@ -585,6 +690,12 @@ export default function MixMasterApp() {
         if (usersRes.ok) {
           const usersData = await usersRes.json();
           if (!ignore && Array.isArray(usersData)) setUsers(usersData);
+        }
+
+        const analyticsRes = await fetch("/api/analytics/summary");
+        if (analyticsRes.ok) {
+          const summary = await analyticsRes.json();
+          if (!ignore) setAnalyticsSummary(summary);
         }
       } catch {
         if (!ignore) setDataSource("demo");
@@ -831,7 +942,7 @@ export default function MixMasterApp() {
             {showFilters && (
               <div style={{ padding: 22, marginBottom: 20, borderRadius: 16, animation: "fadeIn 0.2s ease-out", background: `linear-gradient(145deg, rgba(15,15,28,0.8), rgba(10,10,20,0.95))`, border: `1px solid ${NEON.borderNeon}`, backdropFilter: "blur(12px)", display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 16 }}>
                 <div><div style={{ fontSize: 12, fontWeight: 600, color: NEON.magenta, marginBottom: 8 }}>Flavors</div><div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>{DB.flavor.map(f => { const a = filterFlavors.includes(f.flavor_id); return (<button key={f.flavor_id} onClick={() => setFilterFlavors(p => a ? p.filter(id => id !== f.flavor_id) : [...p, f.flavor_id])} style={{ padding: "4px 10px", borderRadius: 8, fontSize: 11, cursor: "pointer", fontFamily: "'Outfit', sans-serif", background: a ? `${FLAVOR_COLORS[f.flavor_name]}18` : "rgba(255,255,255,0.03)", border: `1px solid ${a ? FLAVOR_COLORS[f.flavor_name] + "50" : NEON.borderNeon}`, color: a ? FLAVOR_COLORS[f.flavor_name] : NEON.textMuted }}>{FLAVOR_ICONS[f.flavor_name]} {f.flavor_name}</button>); })}</div></div>
-                <div><div style={{ fontSize: 12, fontWeight: 600, color: NEON.amber, marginBottom: 8 }}>Difficulty</div><div style={{ display: "flex", gap: 4 }}>{["Simple", "Complex"].map(d => (<button key={d} onClick={() => setFilterDifficulty(p => p === d ? "" : d)} style={{ padding: "4px 12px", borderRadius: 8, fontSize: 11, cursor: "pointer", fontFamily: "'Outfit', sans-serif", background: filterDifficulty === d ? `${DIFFICULTY_COLORS[d]}18` : "rgba(255,255,255,0.03)", border: `1px solid ${filterDifficulty === d ? DIFFICULTY_COLORS[d] + "50" : NEON.borderNeon}`, color: filterDifficulty === d ? DIFFICULTY_COLORS[d] : NEON.textMuted }}>{d}</button>))}</div></div>
+                <div><div style={{ fontSize: 12, fontWeight: 600, color: NEON.amber, marginBottom: 8 }}>Difficulty</div><div style={{ display: "flex", gap: 4 }}>{["Simple", "Complex"].map(d => (<DifficultyChip key={d} difficulty={d} selected={filterDifficulty === d} onClick={() => setFilterDifficulty(p => p === d ? "" : d)} />))}</div></div>
                 <div><div style={{ fontSize: 12, fontWeight: 600, color: NEON.cyan, marginBottom: 8 }}>Liquor</div><div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>{spirits.map(s => { const a = filterLiquor.includes(s); return (<button key={s} onClick={() => setFilterLiquor(p => a ? p.filter(x => x !== s) : [...p, s])} style={{ padding: "4px 10px", borderRadius: 8, fontSize: 11, cursor: "pointer", fontFamily: "'Outfit', sans-serif", background: a ? `${NEON.cyan}15` : "rgba(255,255,255,0.03)", border: `1px solid ${a ? NEON.cyan + "40" : NEON.borderNeon}`, color: a ? NEON.cyan : NEON.textMuted }}>{s}</button>); })}</div></div>
                 <div><div style={{ fontSize: 12, fontWeight: 600, color: NEON.violet, marginBottom: 8 }}>Ingredients</div><div style={{ display: "flex", gap: 4 }}>{[{ key: "few", label: "Fewest First" }, { key: "most", label: "Most First" }].map(o => (<button key={o.key} onClick={() => setFilterIngCount(p => p === o.key ? "" : o.key)} style={{ padding: "4px 10px", borderRadius: 8, fontSize: 11, cursor: "pointer", fontFamily: "'Outfit', sans-serif", background: filterIngCount === o.key ? `${NEON.violet}15` : "rgba(255,255,255,0.03)", border: `1px solid ${filterIngCount === o.key ? NEON.violet + "40" : NEON.borderNeon}`, color: filterIngCount === o.key ? NEON.violet : NEON.textMuted }}>{o.label}</button>))}</div></div>
               </div>
@@ -872,7 +983,7 @@ export default function MixMasterApp() {
           <div style={{ animation: "fadeIn 0.3s ease-out" }}>
             <h2 style={{ fontSize: 30, fontWeight: 700, margin: "0 0 8px", fontFamily: "'Playfair Display', serif", background: `linear-gradient(135deg, ${NEON.gold1}, ${NEON.gold2}, ${NEON.gold5})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>📊 MixMaster Analytics</h2>
             <p style={{ fontSize: 14, color: NEON.textMuted, margin: "0 0 24px" }}>Data-driven insights across our cocktail collection</p>
-            <AnalyticsDashboard cocktails={enrichedCocktails} dataSource={dataSource} currentUser={currentUser} />
+            <AnalyticsDashboard cocktails={enrichedCocktails} analyticsSummary={analyticsSummary} />
           </div>
         )}
       </main>

@@ -75,14 +75,13 @@ def _load_cocktails() -> list[dict[str, Any]]:
                         c.cocktail_name,
                         c.cocktail_description,
                         c.cocktail_image_url,
-                        r.recipe_id,
-                        r.instructions,
-                        r.difficulty,
+                        c.instructions,
+                        c.difficulty,
                         g.glass_type_id,
                         g.glass_type_name,
-                        g.glass_type_description
+                        g.glass_type_description,
+                        g.glass_type_image_url
                     FROM cocktail AS c
-                    JOIN recipe AS r ON r.recipe_id = c.recipe_id
                     JOIN glass_type AS g ON g.glass_type_id = c.glass_type_id
                     ORDER BY c.cocktail_name
                     '''
@@ -104,10 +103,10 @@ def _load_cocktails() -> list[dict[str, Any]]:
             conn.execute(
                 text(
                     '''
-                    SELECT c.cocktail_id, t.tool_id, t.tool_name, t.tool_description
+                        SELECT c.cocktail_id, t.tool_id, t.tool_name, t.tool_description, t.tool_image_url
                     FROM cocktail AS c
-                    JOIN recipe_tool AS rt ON rt.recipe_id = c.recipe_id
-                    JOIN tool AS t ON t.tool_id = rt.tool_id
+                    JOIN cocktail_tool AS ct ON ct.cocktail_id = c.cocktail_id
+                    JOIN tool AS t ON t.tool_id = ct.tool_id
                     '''
                 )
             )
@@ -121,11 +120,11 @@ def _load_cocktails() -> list[dict[str, Any]]:
                         i.ingredient_id,
                         i.ingredient_name AS name,
                         it.ingred_type_name AS type,
-                        ri.quantity,
-                        ri.unit
+                        ci.quantity,
+                        ci.unit
                     FROM cocktail AS c
-                    JOIN recipe_ingredient AS ri ON ri.recipe_id = c.recipe_id
-                    JOIN ingredient AS i ON i.ingredient_id = ri.ingredient_id
+                    JOIN cocktail_ingredient AS ci ON ci.cocktail_id = c.cocktail_id
+                    JOIN ingredient AS i ON i.ingredient_id = ci.ingredient_id
                     JOIN ingredient_type AS it ON it.ingred_type_id = i.ingred_type_id
                     '''
                 )
@@ -159,6 +158,7 @@ def _load_cocktails() -> list[dict[str, Any]]:
             'tool_id': row['tool_id'],
             'tool_name': row['tool_name'],
             'tool_description': row['tool_description'],
+            'tool_image_url': row['tool_image_url'],
         })
 
     for row in ingredients:
@@ -199,7 +199,7 @@ def _load_cocktails() -> list[dict[str, Any]]:
                 'cocktail_description': cocktail['cocktail_description'],
                 'image': cocktail['cocktail_image_url'],
                 'recipe': {
-                    'recipe_id': cocktail['recipe_id'],
+                    'recipe_id': cocktail['cocktail_id'],
                     'instructions': cocktail['instructions'],
                     'difficulty': cocktail['difficulty'],
                 },
@@ -207,6 +207,7 @@ def _load_cocktails() -> list[dict[str, Any]]:
                     'glass_type_id': cocktail['glass_type_id'],
                     'glass_type_name': cocktail['glass_type_name'],
                     'glass_type_description': cocktail['glass_type_description'],
+                    'glass_type_image_url': cocktail['glass_type_image_url'],
                 },
                 'flavors': flavor_map[cocktail['cocktail_id']],
                 'tools': tool_map[cocktail['cocktail_id']],
