@@ -8,8 +8,8 @@ SET SQL_SAFE_UPDATES = 0;
 DELETE FROM user_favorite;
 DELETE FROM review;
 DELETE FROM cocktail_flavor;
-DELETE FROM recipe_ingredient;
-DELETE FROM recipe_tool;
+DELETE FROM cocktail_ingredient;
+DELETE FROM cocktail_tool;
 DELETE FROM cocktail;
 DELETE FROM flavor;
 DELETE FROM glass_type;
@@ -17,7 +17,6 @@ DELETE FROM ingredient;
 DELETE FROM ingredient_type;
 DELETE FROM tool;
 DELETE FROM app_user;
-DELETE FROM recipe;
 
 -- ============================================================
 -- 1. recipe (no FK dependencies)
@@ -44,7 +43,7 @@ INSERT INTO tool (tool_id, tool_name, tool_description, tool_image_url) VALUES
 (70, 'Fine Mesh Strainer', 'A small strainer used for double-straining to remove ice shards.',         NULL);
 
 -- ============================================================
--- 3. ingredient_type (no FK dependencies)
+-- 2. ingredient_type (no FK dependencies)
 -- ============================================================
 INSERT INTO ingredient_type (ingred_type_id, ingred_type_name, ingred_type_description) VALUES
 (1, 'Spirit',    'Base distilled alcoholic beverages such as rum, vodka, and gin.'),
@@ -56,7 +55,7 @@ INSERT INTO ingredient_type (ingred_type_id, ingred_type_name, ingred_type_descr
 (7, 'Bitter',    'Concentrated aromatic extracts used in dashes for complexity.');
 
 -- ============================================================
--- 4. ingredient (FK -> ingredient_type)
+-- 3. ingredient (FK -> ingredient_type)
 -- ============================================================
 INSERT INTO ingredient (ingredient_id, ingredient_name, ingredient_description, ingred_type_id) VALUES
 (501, 'White Rum',          'Light-bodied Caribbean rum.',                          1),
@@ -81,7 +80,7 @@ INSERT INTO ingredient (ingredient_id, ingredient_name, ingredient_description, 
 (520, 'Egg White',          'Pasteurised egg white for cocktail foam.',              6);
 
 -- ============================================================
--- 5. glass_type (no FK dependencies)
+-- 4. glass_type (no FK dependencies)
 -- ============================================================
 INSERT INTO glass_type (glass_type_id, glass_type_name, glass_type_description, glass_type_image_url) VALUES
 (11, 'Highball',        'A tall, narrow glass for long mixed drinks.',                            NULL),
@@ -93,19 +92,19 @@ INSERT INTO glass_type (glass_type_id, glass_type_name, glass_type_description, 
 (17, 'Copper Mug',      'An insulated metal mug traditionally used for mules.',                   NULL);
 
 -- ============================================================
--- 6. cocktail (FK -> recipe, glass_type; recipe_id is UNIQUE)
+-- 5. cocktail (instructions and difficulty now inline)
 -- ============================================================
-INSERT INTO cocktail (cocktail_id, cocktail_name, cocktail_description, cocktail_image_url, recipe_id, glass_type_id) VALUES
-(201, 'Mojito',           'A refreshing Cuban classic with rum, mint, and lime.',       NULL, 101, 11),
-(202, 'Margarita',        'The quintessential tequila-lime-salt combination.',           NULL, 102, 14),
-(203, 'Old Fashioned',    'A timeless bourbon cocktail with bitters and citrus peel.',   NULL, 103, 12),
-(204, 'Espresso Martini', 'A caffeinated, velvety after-dinner shaker cocktail.',        NULL, 104, 13),
-(205, 'Whiskey Sour',     'A frothy, balanced blend of bourbon, citrus, and egg white.', NULL, 105, 12),
-(206, 'Aviation',         'A floral, pre-Prohibition gin cocktail with violet notes.',   NULL, 106, 15),
-(207, 'Dark & Stormy',    'Dark rum meets spicy ginger beer with a lime squeeze.',       NULL, 107, 17);
+INSERT INTO cocktail (cocktail_id, cocktail_name, cocktail_description, cocktail_image_url, instructions, difficulty, glass_type_id) VALUES
+(201, 'Mojito',           'A refreshing Cuban classic with rum, mint, and lime.',       'https://images.unsplash.com/photo-1551538827-9c037cb4f32a?w=400&h=400&fit=crop', 'Muddle mint leaves and sugar in a glass. Add lime juice, fill with crushed ice, pour in white rum, and top with soda water. Stir gently and garnish with a sprig of mint.', 'Simple', 11),
+(202, 'Margarita',        'The quintessential tequila-lime-salt combination.',           'https://images.unsplash.com/photo-1556855810-ac404aa91e85?w=400&h=400&fit=crop', 'Combine tequila, lime juice, and triple sec in a shaker with ice. Shake vigorously, then strain into a salt-rimmed glass over fresh ice.', 'Simple', 14),
+(203, 'Old Fashioned',    'A timeless bourbon cocktail with bitters and citrus peel.',   'https://www.liquor.com/thmb/JT5euWxqUizzlChebR0Km8tZewY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Autumn_Rum_Old_Fashioned_Credit_Tim_Nusog_2000x2000_primary-502572bcaa2746109e0dc655b68eb16c.jpg', 'Stir bourbon, sugar syrup, and Angostura bitters with ice in a mixing glass until well chilled. Strain into a rocks glass over a large ice cube and garnish with an orange peel.', 'Simple', 12),
+(204, 'Espresso Martini', 'A caffeinated, velvety after-dinner shaker cocktail.',        'https://punchdrink.com/wp-content/uploads/2023/06/Article2-Nonalcoholic-Espresso-Martini.jpg?resize=600,825', 'Shake vodka, coffee liqueur, and fresh espresso with ice until frothy. Double-strain into a chilled coupe glass and garnish with three coffee beans.', 'Complex', 13),
+(205, 'Whiskey Sour',     'A frothy, balanced blend of bourbon, citrus, and egg white.', 'https://cdn.diffordsguide.com/cocktail/rVQbYA/lifestyle/0/1024x.webp?v=1737701584', 'Dry-shake egg white, lemon juice, simple syrup, and bourbon. Add ice, shake again until very cold. Strain into a rocks glass, dash Angostura on the foam, and draw a design with a toothpick.', 'Complex', 12),
+(206, 'Aviation',         'A floral, pre-Prohibition gin cocktail with violet notes.',   'https://images.getrecipekit.com/20221214143801-aviation-cocktail-recipe.png?width=650&quality=90&', 'Combine gin, maraschino liqueur, fresh lime juice, and crème de violette in a shaker with ice. Shake and strain into a chilled cocktail glass. Garnish with a brandied cherry.', 'Complex', 15),
+(207, 'Dark & Stormy',    'Dark rum meets spicy ginger beer with a lime squeeze.',       'https://static01.nyt.com/images/2014/04/23/dining/Dark-n-Stormy/Dark-n-Stormy-jumbo.jpg?quality=75&auto=webp', 'Build dark rum and ginger beer over ice in a tall glass. Squeeze in fresh lime juice, stir briefly, and garnish with a lime wheel and candied ginger.', 'Simple', 17);
 
 -- ============================================================
--- 7. flavor (no FK dependencies)
+-- 6. flavor (no FK dependencies)
 -- ============================================================
 INSERT INTO flavor (flavor_id, flavor_name, flavor_description) VALUES
 (301, 'Sweet',      'Sugary, dessert-like character.'),
@@ -117,66 +116,66 @@ INSERT INTO flavor (flavor_id, flavor_name, flavor_description) VALUES
 (307, 'Spicy',      'Warm heat from ginger, pepper, or chili.');
 
 -- ============================================================
--- 8. recipe_tool (FK -> recipe, tool)
+-- 7. cocktail_tool (FK -> cocktail, tool)
 -- ============================================================
-INSERT INTO recipe_tool (recipe_id, tool_id) VALUES
-(101, 30),  -- Mojito           -> Muddler
-(101, 40),  -- Mojito           -> Jigger
-(102, 10),  -- Margarita        -> Shaker
-(102, 40),  -- Margarita        -> Jigger
-(102, 50),  -- Margarita        -> Hawthorne Strainer
-(103, 20),  -- Old Fashioned    -> Mixing Glass
-(103, 60),  -- Old Fashioned    -> Bar Spoon
-(103, 40),  -- Old Fashioned    -> Jigger
-(104, 10),  -- Espresso Martini -> Shaker
-(104, 70),  -- Espresso Martini -> Fine Mesh Strainer
-(104, 40),  -- Espresso Martini -> Jigger
-(105, 10),  -- Whiskey Sour     -> Shaker
-(105, 50),  -- Whiskey Sour     -> Hawthorne Strainer
-(106, 10),  -- Aviation         -> Shaker
-(106, 50),  -- Aviation         -> Hawthorne Strainer
-(107, 40);  -- Dark & Stormy    -> Jigger
+INSERT INTO cocktail_tool (cocktail_id, tool_id) VALUES
+(201, 30),  -- Mojito           -> Muddler
+(201, 40),  -- Mojito           -> Jigger
+(202, 10),  -- Margarita        -> Shaker
+(202, 40),  -- Margarita        -> Jigger
+(202, 50),  -- Margarita        -> Hawthorne Strainer
+(203, 20),  -- Old Fashioned    -> Mixing Glass
+(203, 60),  -- Old Fashioned    -> Bar Spoon
+(203, 40),  -- Old Fashioned    -> Jigger
+(204, 10),  -- Espresso Martini -> Shaker
+(204, 70),  -- Espresso Martini -> Fine Mesh Strainer
+(204, 40),  -- Espresso Martini -> Jigger
+(205, 10),  -- Whiskey Sour     -> Shaker
+(205, 50),  -- Whiskey Sour     -> Hawthorne Strainer
+(206, 10),  -- Aviation         -> Shaker
+(206, 50),  -- Aviation         -> Hawthorne Strainer
+(207, 40);  -- Dark & Stormy    -> Jigger
 
 -- ============================================================
--- 9. recipe_ingredient (FK -> recipe, ingredient)
+-- 8. cocktail_ingredient (FK -> cocktail, ingredient)
 -- ============================================================
-INSERT INTO recipe_ingredient (recipe_id, ingredient_id, quantity, unit) VALUES
+INSERT INTO cocktail_ingredient (cocktail_id, ingredient_id, quantity, unit) VALUES
 -- Mojito
-(101, 501, 2.0,  'oz'),
-(101, 511, 1.0,  'oz'),
-(101, 514, 2.0,  'tsp'),
-(101, 515, 8.0,  'leaves'),
-(101, 516, 2.0,  'oz'),
+(201, 501, 2.0,  'oz'),
+(201, 511, 1.0,  'oz'),
+(201, 514, 2.0,  'tsp'),
+(201, 515, 8.0,  'leaves'),
+(201, 516, 2.0,  'oz'),
 -- Margarita
-(102, 502, 2.0,  'oz'),
-(102, 507, 1.0,  'oz'),
-(102, 511, 1.0,  'oz'),
+(202, 502, 2.0,  'oz'),
+(202, 507, 1.0,  'oz'),
+(202, 511, 1.0,  'oz'),
 -- Old Fashioned
-(103, 503, 2.0,  'oz'),
-(103, 513, 0.25, 'oz'),
-(103, 519, 3.0,  'dashes'),
+(203, 503, 2.0,  'oz'),
+(203, 513, 0.25, 'oz'),
+(203, 519, 3.0,  'dashes'),
 -- Espresso Martini
-(104, 504, 1.5,  'oz'),
-(104, 508, 1.0,  'oz'),
-(104, 518, 1.0,  'shot'),
+(204, 504, 1.5,  'oz'),
+(204, 508, 1.0,  'oz'),
+(204, 518, 1.0,  'shot'),
 -- Whiskey Sour
-(105, 503, 2.0,  'oz'),
-(105, 512, 0.75, 'oz'),
-(105, 513, 0.75, 'oz'),
-(105, 519, 2.0,  'dashes'),
-(105, 520, 1.0,  'oz'),
+(205, 503, 2.0,  'oz'),
+(205, 512, 0.75, 'oz'),
+(205, 513, 0.75, 'oz'),
+(205, 519, 2.0,  'dashes'),
+(205, 520, 1.0,  'oz'),
 -- Aviation
-(106, 505, 2.0,  'oz'),
-(106, 509, 0.5,  'oz'),
-(106, 511, 0.75, 'oz'),
-(106, 510, 0.25, 'oz'),
+(206, 505, 2.0,  'oz'),
+(206, 509, 0.5,  'oz'),
+(206, 511, 0.75, 'oz'),
+(206, 510, 0.25, 'oz'),
 -- Dark & Stormy
-(107, 506, 2.0,  'oz'),
-(107, 517, 4.0,  'oz'),
-(107, 511, 0.5,  'oz');
+(207, 506, 2.0,  'oz'),
+(207, 517, 4.0,  'oz'),
+(207, 511, 0.5,  'oz');
 
 -- ============================================================
--- 10. cocktail_flavor (FK -> cocktail, flavor)
+-- 9. cocktail_flavor (FK -> cocktail, flavor)
 -- ============================================================
 INSERT INTO cocktail_flavor (cocktail_id, flavor_id) VALUES
 (201, 302), (201, 304),   -- Mojito:           Sour, Refreshing
@@ -188,7 +187,7 @@ INSERT INTO cocktail_flavor (cocktail_id, flavor_id) VALUES
 (207, 307), (207, 304);   -- Dark & Stormy:    Spicy, Refreshing
 
 -- ============================================================
--- 11. app_user (no FK dependencies)
+-- 10. app_user (no FK dependencies)
 -- ============================================================
 INSERT INTO app_user (user_id, username, email, password_hash, created_at) VALUES
 (1001, 'mixmaster_mike', 'mike@cocktail.com',  'admin',    '2025-01-15 10:30:00'),
