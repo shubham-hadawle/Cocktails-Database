@@ -38,61 +38,6 @@ Cocktails-Database/
 
 ---
 
-## Quick Start (Docker + Local App)
-
-Use this path if you want the fastest setup (with Docker already installed).
-
-1. Start database from project root:
-
-```bash
-docker compose up -d
-docker compose ps
-```
-
-2. Start backend in a new terminal:
-
-```bash
-cd backend
-python -m venv .venv
-# Windows PowerShell
-.venv\Scripts\activate
-pip install -r requirements.txt
-uvicorn app.main:app --reload
-```
-
-3. Start frontend in a new terminal:
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-4. Open:
-
-- Frontend: `http://localhost:3000`
-- API docs: `http://localhost:8000/docs`
-
-Quick backend check:
-
-```bash
-curl http://localhost:8000/health
-```
-
-If `/health` returns `500`, run `pip install -r requirements.txt` again inside `backend`, then verify `backend/.env` points to the correct MySQL host/port and password.
-
----
-
-## After Reboot (Fast Restart)
-
-```bash
-docker compose up -d
-cd backend && .venv\Scripts\activate && uvicorn app.main:app --reload
-cd frontend && npm run dev
-```
-
----
-
 ## Prerequisites
 
 Make sure you have these installed before starting:
@@ -116,7 +61,7 @@ docker compose version
 
 ---
 
-## (Not using Docker) Step 1 — Set Up the MySQL Database
+## Step 1 — Set Up the MySQL Database
 
 ### Option A — Using MySQL Workbench (recommended for Windows)
 
@@ -265,6 +210,61 @@ Look below the "Discover Your Next Cocktail" heading — you'll see a small stat
 5. **Edit** your review → updates the `review` table
 6. **Delete** your review → deletes from the `review` table
 7. **Refresh the page** → your favorites and reviews persist (stored in MySQL)
+
+---
+
+## Quick Start (Docker + Local App)
+
+Use this path if you want the fastest setup (with Docker already installed).
+
+1. Start database from project root:
+
+```bash
+docker compose up -d
+docker compose ps
+```
+
+2. Start backend in a new terminal:
+
+```bash
+cd backend
+python -m venv .venv
+# Windows PowerShell
+.venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
+
+3. Start frontend in a new terminal:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+4. Open:
+
+- Frontend: `http://localhost:3000`
+- API docs: `http://localhost:8000/docs`
+
+Quick backend check:
+
+```bash
+curl http://localhost:8000/health
+```
+
+If `/health` returns `500`, run `pip install -r requirements.txt` again inside `backend`, then verify `backend/.env` points to the correct MySQL host/port and password.
+
+---
+
+## After Reboot (Fast Restart)
+
+```bash
+docker compose up -d
+cd backend && .venv\Scripts\activate && uvicorn app.main:app --reload
+cd frontend && npm run dev
+```
 
 ---
 
