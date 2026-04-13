@@ -24,14 +24,20 @@ const NEON = {
   violet: "#B24BF3",
   violetGlow: "#9C27B0",
   violetSoft: "#CE93D8",
-  textPrimary: "#00E5FF", // Changed to solid neon cyan
-  textSecondary: "#FF2D95", // Changed to solid neon magenta
-  textMuted: "#B24BF3", // Changed to solid neon violet
-  borderNeon: "rgba(178,75,243,0.2)",
+  textPrimary: "#F5E6C8",   // Warm champagne gold
+  textSecondary: "#C9A84C",  // Burnished antique gold
+  textMuted: "#8B7335",      // Muted old-money bronze
+  borderNeon: "rgba(191,149,63,0.2)",
   borderAmber: "rgba(255,140,0,0.2)",
   borderCyan: "rgba(0,229,255,0.15)",
   borderMagenta: "rgba(255,45,149,0.2)",
   star: "#FFAB00",
+  // Old-money gold gradient palette
+  gold1: "#BF953F",
+  gold2: "#FCF6BA",
+  gold3: "#B38728",
+  gold4: "#FBF5B7",
+  gold5: "#AA771C",
 };
 
 // ============================================================
@@ -394,7 +400,7 @@ function CocktailCard({ cocktail, onClick, isFavorited, onToggleFavorite, curren
   );
 }
 
-function CocktailDetail({ cocktail, onBack, currentUser, onToggleFavorite, isFavorited, reviews, onSubmitReview, onDeleteReview, onEditReview, toast }) {
+function CocktailDetail({ cocktail, onBack, currentUser, onToggleFavorite, isFavorited, reviews, onSubmitReview, onDeleteReview, onEditReview, toast, users }) {
   const [newRating, setNewRating] = useState(0); const [newReviewText, setNewReviewText] = useState(""); const [showReviewForm, setShowReviewForm] = useState(false);
   const [editingReviewId, setEditingReviewId] = useState(null); const [editText, setEditText] = useState(""); const [editRating, setEditRating] = useState(0); const [imgError, setImgError] = useState(false);
   const userReview = currentUser ? reviews.find(r => r.user_id === currentUser.user_id) : null;
@@ -416,33 +422,33 @@ function CocktailDetail({ cocktail, onBack, currentUser, onToggleFavorite, isFav
         </div>
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 4 }}>
-            <h1 style={{ margin: 0, fontSize: 34, fontWeight: 700, fontFamily: "'Playfair Display', serif", background: `linear-gradient(135deg, ${NEON.textPrimary}, ${NEON.cyan})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{cocktail.cocktail_name}</h1>
+            <h1 style={{ margin: 0, fontSize: 34, fontWeight: 700, fontFamily: "'Playfair Display', serif", background: `linear-gradient(135deg, ${NEON.gold1}, ${NEON.gold2}, ${NEON.gold3})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{cocktail.cocktail_name}</h1>
             <span style={{ padding: "5px 16px", borderRadius: 20, fontSize: 12, fontWeight: 700, letterSpacing: "0.05em", background: `${DIFFICULTY_COLORS[cocktail.recipe.difficulty]}15`, color: DIFFICULTY_COLORS[cocktail.recipe.difficulty], border: `1px solid ${DIFFICULTY_COLORS[cocktail.recipe.difficulty]}40`, textShadow: `0 0 8px ${DIFFICULTY_COLORS[cocktail.recipe.difficulty]}40` }}>{cocktail.recipe.difficulty.toUpperCase()}</span>
           </div>
           <p style={{ fontSize: 15, color: NEON.textSecondary, lineHeight: 1.6, margin: "8px 0 16px" }}>{cocktail.cocktail_description}</p>
           {cocktail.avgRating !== null && <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}><StarRating rating={cocktail.avgRating} size={18} /><span style={{ fontSize: 15, fontWeight: 600, color: NEON.star }}>{cocktail.avgRating.toFixed(1)}</span><span style={{ fontSize: 12, color: NEON.textMuted }}>({reviews.length} review{reviews.length !== 1 ? "s" : ""})</span></div>}
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 20 }}>{cocktail.flavors.map(f => (<span key={f.flavor_id} style={{ fontSize: 13, padding: "6px 16px", borderRadius: 20, background: `${FLAVOR_COLORS[f.flavor_name]}12`, color: FLAVOR_COLORS[f.flavor_name], border: `1px solid ${FLAVOR_COLORS[f.flavor_name]}30`, textShadow: `0 0 8px ${FLAVOR_COLORS[f.flavor_name]}40`, boxShadow: `0 0 12px ${FLAVOR_COLORS[f.flavor_name]}10` }}>{FLAVOR_ICONS[f.flavor_name]} {f.flavor_name}</span>))}</div>
-          <div style={{ marginBottom: 20 }}><h3 style={{ fontSize: 16, fontWeight: 600, color: NEON.cyan, margin: "0 0 10px", fontFamily: "'Playfair Display', serif", textShadow: `0 0 10px ${NEON.cyan}25` }}>Ingredients</h3><div style={{ display: "flex", flexDirection: "column", gap: 6 }}>{cocktail.ingredients.map((ing, i) => (<div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 14px", background: `rgba(178,75,243,0.04)`, borderRadius: 10, border: `1px solid ${NEON.borderNeon}` }}><div style={{ display: "flex", alignItems: "center", gap: 8 }}><span style={{ fontSize: 10, padding: "2px 8px", borderRadius: 8, background: `${NEON.violet}15`, color: NEON.violetSoft, border: `1px solid ${NEON.violet}20` }}>{ing.type}</span><span style={{ fontSize: 14, color: NEON.textPrimary }}>{ing.name}</span></div><span style={{ fontSize: 13, color: NEON.amber, fontWeight: 600, textShadow: `0 0 6px ${NEON.amber}30` }}>{ing.quantity} {ing.unit}</span></div>))}</div></div>
+          <div style={{ marginBottom: 20 }}><h3 style={{ fontSize: 16, fontWeight: 600, color: NEON.cyan, margin: "0 0 10px", fontFamily: "'Playfair Display', serif", textShadow: `0 0 10px ${NEON.cyan}25` }}>Ingredients</h3><div style={{ display: "flex", flexDirection: "column", gap: 6 }}>{cocktail.ingredients.map((ing, i) => (<div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 14px", background: `rgba(191,149,63,0.04)`, borderRadius: 10, border: `1px solid ${NEON.borderNeon}` }}><div style={{ display: "flex", alignItems: "center", gap: 8 }}><span style={{ fontSize: 10, padding: "2px 8px", borderRadius: 8, background: `${NEON.gold5}15`, color: NEON.gold2, border: `1px solid ${NEON.gold5}20` }}>{ing.type}</span><span style={{ fontSize: 14, color: NEON.textPrimary }}>{ing.name}</span></div><span style={{ fontSize: 13, color: NEON.gold1, fontWeight: 600, textShadow: `0 0 6px ${NEON.gold5}30` }}>{ing.quantity} {ing.unit}</span></div>))}</div></div>
           {cocktail.tools.length > 0 && <div style={{ marginBottom: 20 }}><h3 style={{ fontSize: 16, fontWeight: 600, color: NEON.magenta, margin: "0 0 10px", fontFamily: "'Playfair Display', serif", textShadow: `0 0 10px ${NEON.magenta}25` }}>Tools Needed</h3><div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>{cocktail.tools.map(t => (<span key={t.tool_id} style={{ padding: "7px 14px", borderRadius: 12, fontSize: 12, background: `${NEON.magenta}08`, border: `1px solid ${NEON.magenta}20`, color: NEON.magentaSoft, display: "flex", alignItems: "center", gap: 5 }}>{TOOL_ICONS[t.tool_name]} {t.tool_name}</span>))}</div></div>}
           <div><h3 style={{ fontSize: 16, fontWeight: 600, color: NEON.amber, margin: "0 0 10px", fontFamily: "'Playfair Display', serif", textShadow: `0 0 10px ${NEON.amber}25` }}>Preparation Instructions</h3><div style={{ padding: 18, borderRadius: 14, backdropFilter: "blur(8px)", background: `linear-gradient(145deg, ${NEON.amber}06, ${NEON.magenta}04)`, border: `1px solid ${NEON.borderAmber}`, borderLeft: `3px solid ${NEON.amber}`, boxShadow: `inset 0 0 30px ${NEON.amber}05` }}><p style={{ margin: 0, fontSize: 14, color: NEON.textSecondary, lineHeight: 1.9 }}>{cocktail.recipe.instructions}</p></div></div>
         </div>
       </div>
       <div style={{ marginTop: 36 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-          <h2 style={{ margin: 0, fontSize: 22, fontWeight: 700, fontFamily: "'Playfair Display', serif", background: `linear-gradient(135deg, ${NEON.textPrimary}, ${NEON.violet})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Reviews ({reviews.length})</h2>
+          <h2 style={{ margin: 0, fontSize: 22, fontWeight: 700, fontFamily: "'Playfair Display', serif", background: `linear-gradient(135deg, ${NEON.gold1}, ${NEON.gold2}, ${NEON.gold5})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Reviews ({reviews.length})</h2>
           {currentUser && !userReview && <button onClick={() => setShowReviewForm(!showReviewForm)} style={{ background: showReviewForm ? `${NEON.magenta}15` : `${NEON.cyan}10`, border: `1px solid ${showReviewForm ? NEON.magenta + "30" : NEON.cyan + "30"}`, color: showReviewForm ? NEON.magenta : NEON.cyan, padding: "9px 18px", borderRadius: 12, cursor: "pointer", fontSize: 13, fontWeight: 500, fontFamily: "'Outfit', sans-serif", display: "flex", alignItems: "center", gap: 6, boxShadow: `0 0 15px ${showReviewForm ? NEON.magenta : NEON.cyan}15` }}>{showReviewForm ? <><X size={14} /> Cancel</> : <><Plus size={14} /> Write a Review</>}</button>}
         </div>
         {showReviewForm && currentUser && !userReview && (
           <div style={{ ...pnl, marginBottom: 16, boxShadow: `0 0 30px ${NEON.cyan}10` }}>
             <div style={{ marginBottom: 12 }}><div style={{ fontSize: 13, color: NEON.textSecondary, marginBottom: 6 }}>Your Rating</div><StarRating rating={newRating} size={24} interactive onChange={setNewRating} /></div>
             <textarea value={newReviewText} onChange={e => setNewReviewText(e.target.value)} placeholder="Share your thoughts on this cocktail..." style={{ ...inp, minHeight: 80, resize: "vertical" }} />
-            <button onClick={handleSubmit} style={{ marginTop: 10, padding: "11px 28px", border: "none", borderRadius: 12, fontSize: 14, fontWeight: 600, cursor: "pointer", fontFamily: "'Outfit', sans-serif", color: NEON.bg, background: `linear-gradient(135deg, ${NEON.cyan}, ${NEON.violet})`, boxShadow: `0 0 20px ${NEON.cyan}30` }}>Submit Review</button>
+            <button onClick={handleSubmit} style={{ marginTop: 10, padding: "11px 28px", border: "none", borderRadius: 12, fontSize: 14, fontWeight: 600, cursor: "pointer", fontFamily: "'Outfit', sans-serif", color: NEON.bg, background: `linear-gradient(135deg, ${NEON.gold1}, ${NEON.gold3})`, boxShadow: `0 0 20px ${NEON.gold5}30` }}>Submit Review</button>
           </div>
         )}
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           {reviews.length === 0 && <div style={{ textAlign: "center", padding: 40, color: NEON.textMuted, fontSize: 14 }}>No reviews yet. Be the first to share your thoughts!</div>}
           {reviews.map(review => {
-            const reviewer = DB.app_user.find(u => u.user_id === review.user_id);
+            const reviewer = users.find(u => u.user_id === review.user_id);
             const isOwn = currentUser && currentUser.user_id === review.user_id;
             const isEditing = editingReviewId === review.review_id;
             return (
@@ -462,15 +468,15 @@ function CocktailDetail({ cocktail, onBack, currentUser, onToggleFavorite, isFav
 }
 
 function AuthModal({ mode, onClose, onLogin, onRegister }) {
-  const [isLogin, setIsLogin] = useState(mode === "login"); const [username, setUsername] = useState(""); const [email, setEmail] = useState(""); const [password, setPassword] = useState(""); const [showPw, setShowPw] = useState(false); const [error, setError] = useState("");
-  const handleSubmit = () => { setError(""); if (isLogin) { if (!username || !password) { setError("Please fill in all fields"); return; } if (!onLogin(username, password)) setError("Invalid username or password"); } else { if (!username || !email || !password) { setError("Please fill in all fields"); return; } if (password.length < 4) { setError("Password must be at least 4 characters"); return; } if (!email.includes("@")) { setError("Please enter a valid email"); return; } if (!onRegister(username, email, password)) setError("Username or email already taken"); } };
+  const [isLogin, setIsLogin] = useState(mode === "login"); const [username, setUsername] = useState(""); const [email, setEmail] = useState(""); const [password, setPassword] = useState(""); const [showPw, setShowPw] = useState(false); const [error, setError] = useState(""); const [loading, setLoading] = useState(false);
+  const handleSubmit = async () => { setError(""); if (isLogin) { if (!username || !password) { setError("Please fill in all fields"); return; } setLoading(true); const result = await onLogin(username, password); setLoading(false); if (!result) setError("Invalid username or password"); } else { if (!username || !email || !password) { setError("Please fill in all fields"); return; } if (password.length < 4) { setError("Password must be at least 4 characters"); return; } if (!email.includes("@")) { setError("Please enter a valid email"); return; } setLoading(true); const result = await onRegister(username, email, password); setLoading(false); if (!result) setError("Username or email already taken"); } };
   const inp = { width: "100%", padding: "12px 16px", background: `${NEON.bg}CC`, border: `1px solid ${NEON.borderNeon}`, borderRadius: 12, color: NEON.textPrimary, fontSize: 14, outline: "none", fontFamily: "'Outfit', sans-serif", boxSizing: "border-box", transition: "border-color 0.2s, box-shadow 0.2s" };
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 1000, background: "rgba(0,0,0,0.75)", display: "flex", alignItems: "center", justifyContent: "center", backdropFilter: "blur(8px)" }} onClick={onClose}>
       <div onClick={e => e.stopPropagation()} style={{ background: NEON.bgPanel, border: `1px solid ${NEON.violet}30`, borderRadius: 22, padding: 36, width: 400, maxWidth: "90vw", backdropFilter: "blur(20px)", boxShadow: `0 0 60px ${NEON.violet}15, 0 0 120px ${NEON.magenta}08`, position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", top: 0, left: 20, right: 20, height: 2, background: `linear-gradient(90deg, ${NEON.cyan}, ${NEON.magenta}, ${NEON.amber})`, borderRadius: 2 }} />
+        <div style={{ position: "absolute", top: 0, left: 20, right: 20, height: 2, background: `linear-gradient(90deg, ${NEON.gold5}, ${NEON.gold2}, ${NEON.gold1}, ${NEON.gold2}, ${NEON.gold5})`, borderRadius: 2 }} />
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
-          <h2 style={{ margin: 0, fontSize: 26, fontWeight: 700, fontFamily: "'Playfair Display', serif", background: `linear-gradient(135deg, ${NEON.cyan}, ${NEON.magenta})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{isLogin ? "Welcome Back" : "Join MixMaster"}</h2>
+          <h2 style={{ margin: 0, fontSize: 26, fontWeight: 700, fontFamily: "'Playfair Display', serif", background: `linear-gradient(135deg, ${NEON.gold1}, ${NEON.gold2}, ${NEON.gold3})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{isLogin ? "Welcome Back" : "Join MixMaster"}</h2>
           <button onClick={onClose} style={{ background: "none", border: "none", color: NEON.textMuted, cursor: "pointer" }}><X size={20} /></button>
         </div>
         {error && <div style={{ padding: "10px 14px", background: `${NEON.magenta}10`, border: `1px solid ${NEON.magenta}30`, borderRadius: 10, marginBottom: 16, fontSize: 13, color: NEON.magenta, display: "flex", alignItems: "center", gap: 6 }}><AlertCircle size={14} /> {error}</div>}
@@ -495,48 +501,202 @@ export default function MixMasterApp() {
   const [filterLiquor, setFilterLiquor] = useState([]); const [filterIngCount, setFilterIngCount] = useState(""); const [sortBy, setSortBy] = useState("name"); const [showAuthModal, setShowAuthModal] = useState(null);
   const [reviews, setReviews] = useState([...DB.review]); const [favorites, setFavorites] = useState([...DB.user_favorite]); const [users, setUsers] = useState([...DB.app_user]); const [toastMsg, setToastMsg] = useState(null);
   const [cocktails, setCocktails] = useState(DB.cocktail.map(enrichCocktail)); const [dataSource, setDataSource] = useState("demo");
-  const nextReviewId = useRef(5011); const nextFavId = useRef(808); const nextUserId = useRef(1008);
   const showToast = useCallback((message, type = "success") => { setToastMsg({ message, type, id: Date.now() }); }, []);
 
+  // ── Load cocktails + users from API on mount ──
   useEffect(() => {
     let ignore = false;
 
-    const loadCocktails = async () => {
+    const loadData = async () => {
       try {
-        const response = await fetch("/api/cocktails");
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const data = await response.json();
-        if (!ignore && Array.isArray(data) && data.length > 0) {
-          setCocktails(data.map(cocktail => ({
-            ...cocktail,
-            image: cocktail.image || COCKTAIL_IMAGES[cocktail.cocktail_id],
-            emoji: cocktail.emoji || COCKTAIL_EMOJIS[cocktail.cocktail_id],
+        const [cocktailRes, usersRes] = await Promise.all([
+          fetch("/api/cocktails"),
+          fetch("/api/users"),
+        ]);
+        if (!cocktailRes.ok) throw new Error(`HTTP ${cocktailRes.status}`);
+        const cocktailData = await cocktailRes.json();
+        if (!ignore && Array.isArray(cocktailData) && cocktailData.length > 0) {
+          setCocktails(cocktailData.map(c => ({
+            ...c,
+            image: c.image || COCKTAIL_IMAGES[c.cocktail_id],
+            emoji: c.emoji || COCKTAIL_EMOJIS[c.cocktail_id],
           })));
-          setReviews(data.flatMap(cocktail => cocktail.reviews || []));
+          setReviews(cocktailData.flatMap(c => c.reviews || []));
           setDataSource("api");
+        }
+        if (usersRes.ok) {
+          const usersData = await usersRes.json();
+          if (!ignore && Array.isArray(usersData)) setUsers(usersData);
         }
       } catch {
         if (!ignore) setDataSource("demo");
       }
     };
 
-    loadCocktails();
+    loadData();
     return () => { ignore = true; };
   }, []);
-  const handleLogin = (username, password) => { const user = users.find(u => u.username === username && u.password_hash === password); if (user) { setCurrentUser(user); setShowAuthModal(null); showToast(`Welcome back, ${user.username}!`); return true; } return false; };
-  const handleRegister = (username, email, password) => { if (users.find(u => u.username === username || u.email === email)) return false; const nu = { user_id: nextUserId.current++, username, email, password_hash: password, created_at: new Date().toISOString().split("T")[0] }; setUsers(p => [...p, nu]); DB.app_user.push(nu); setCurrentUser(nu); setShowAuthModal(null); showToast(`Welcome to MixMaster, ${username}!`); return true; };
-  const handleLogout = () => { setCurrentUser(null); setPage("home"); showToast("Signed out successfully"); };
+
+  // ── Load favorites when user logs in ──
+  useEffect(() => {
+    if (!currentUser || dataSource !== "api") return;
+    let ignore = false;
+    const loadFavorites = async () => {
+      try {
+        const res = await fetch(`/api/favorites/${currentUser.user_id}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (!ignore) setFavorites(data);
+        }
+      } catch { /* keep demo favorites */ }
+    };
+    loadFavorites();
+    return () => { ignore = true; };
+  }, [currentUser, dataSource]);
+
+  // ── Auth handlers (API-connected) ──
+  const handleLogin = async (username, password) => {
+    if (dataSource === "api") {
+      try {
+        const res = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password }),
+        });
+        if (!res.ok) return false;
+        const user = await res.json();
+        setCurrentUser(user); setShowAuthModal(null);
+        showToast(`Welcome back, ${user.username}!`);
+        return true;
+      } catch { return false; }
+    }
+    // Demo fallback
+    const user = users.find(u => u.username === username && u.password_hash === password);
+    if (user) { setCurrentUser(user); setShowAuthModal(null); showToast(`Welcome back, ${user.username}!`); return true; }
+    return false;
+  };
+
+  const handleRegister = async (username, email, password) => {
+    if (dataSource === "api") {
+      try {
+        const res = await fetch("/api/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, email, password }),
+        });
+        if (!res.ok) return false;
+        const user = await res.json();
+        setUsers(p => [...p, user]);
+        setCurrentUser(user); setShowAuthModal(null);
+        showToast(`Welcome to MixMaster, ${username}!`);
+        return true;
+      } catch { return false; }
+    }
+    // Demo fallback
+    if (users.find(u => u.username === username || u.email === email)) return false;
+    const nu = { user_id: Date.now(), username, email, password_hash: password, created_at: new Date().toISOString().split("T")[0] };
+    setUsers(p => [...p, nu]); setCurrentUser(nu); setShowAuthModal(null);
+    showToast(`Welcome to MixMaster, ${username}!`); return true;
+  };
+
+  const handleLogout = () => { setCurrentUser(null); setFavorites([]); setPage("home"); showToast("Signed out successfully"); };
+
+  // ── Favorites (API-connected) ──
   const isFav = (cid) => currentUser && favorites.some(f => f.user_id === currentUser.user_id && f.cocktail_id === cid);
-  const toggleFav = (cid) => { if (!currentUser) { setShowAuthModal("login"); return; } const ex = favorites.find(f => f.user_id === currentUser.user_id && f.cocktail_id === cid); if (ex) { setFavorites(p => p.filter(f => f !== ex)); showToast("Removed from favorites"); } else { setFavorites(p => [...p, { favorite_id: nextFavId.current++, user_id: currentUser.user_id, cocktail_id: cid }]); showToast("Added to favorites! ❤️"); } };
-  const submitReview = (cid, rating, text) => { if (!currentUser) { setShowAuthModal("login"); return; } setReviews(p => [...p, { review_id: nextReviewId.current++, cocktail_id: cid, user_id: currentUser.user_id, rating, review_text: text, created_at: new Date().toISOString().split("T")[0] }]); showToast("Review submitted! 🍸"); };
-  const deleteReview = (rid) => { setReviews(p => p.filter(r => r.review_id !== rid)); showToast("Review deleted"); };
-  const editReview = (rid, nr, nt) => { setReviews(p => p.map(r => r.review_id === rid ? { ...r, rating: nr, review_text: nt } : r)); showToast("Review updated!"); };
+
+  const toggleFav = async (cid) => {
+    if (!currentUser) { setShowAuthModal("login"); return; }
+    const existing = favorites.find(f => f.user_id === currentUser.user_id && f.cocktail_id === cid);
+    if (existing) {
+      // Remove favorite
+      if (dataSource === "api") {
+        try {
+          const res = await fetch(`/api/favorites/${currentUser.user_id}/${cid}`, { method: "DELETE" });
+          if (!res.ok) { showToast("Failed to remove favorite", "error"); return; }
+        } catch (err) { showToast("Error: " + err.message, "error"); return; }
+      }
+      setFavorites(p => p.filter(f => !(f.user_id === currentUser.user_id && f.cocktail_id === cid)));
+      showToast("Removed from favorites");
+    } else {
+      // Add favorite
+      if (dataSource === "api") {
+        try {
+          const res = await fetch("/api/favorites", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ user_id: currentUser.user_id, cocktail_id: cid }),
+          });
+          if (!res.ok) { showToast("Failed to add favorite", "error"); return; }
+          const newFav = await res.json();
+          setFavorites(p => [...p, newFav]);
+        } catch (err) { showToast("Error: " + err.message, "error"); return; }
+      } else {
+        setFavorites(p => [...p, { favorite_id: Date.now(), user_id: currentUser.user_id, cocktail_id: cid }]);
+      }
+      showToast("Added to favorites! ❤️");
+    }
+  };
+
+  // ── Reviews (API-connected — already async from your file) ──
+  const submitReview = async (cid, rating, text) => {
+    if (!currentUser) { setShowAuthModal("login"); return; }
+    if (dataSource === "api") {
+      try {
+        const response = await fetch("/api/reviews", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ cocktail_id: cid, user_id: currentUser.user_id, rating, review_text: text }),
+        });
+        if (!response.ok) { const error = await response.json(); showToast(error.detail || "Failed to submit review", "error"); return; }
+        const newReview = await response.json();
+        setReviews(p => [...p, newReview]);
+        showToast("Review submitted! 🍸");
+      } catch (err) { showToast("Error submitting review: " + err.message, "error"); }
+    } else {
+      const newReview = { review_id: Date.now(), cocktail_id: cid, user_id: currentUser.user_id, rating, review_text: text, created_at: new Date().toISOString().split("T")[0] };
+      setReviews(p => [...p, newReview]);
+      showToast("Review submitted! 🍸");
+    }
+  };
+
+  const deleteReview = async (rid) => {
+    if (dataSource === "api") {
+      try {
+        const response = await fetch(`/api/reviews/${rid}`, { method: "DELETE" });
+        if (!response.ok) { const error = await response.json(); showToast(error.detail || "Failed to delete review", "error"); return; }
+      } catch (err) { showToast("Error deleting review: " + err.message, "error"); return; }
+    }
+    setReviews(p => p.filter(r => r.review_id !== rid));
+    showToast("Review deleted");
+  };
+
+  const editReview = async (rid, nr, nt) => {
+    if (dataSource === "api") {
+      try {
+        const response = await fetch(`/api/reviews/${rid}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ rating: nr, review_text: nt }),
+        });
+        if (!response.ok) { const error = await response.json(); showToast(error.detail || "Failed to update review", "error"); return; }
+        const updatedReview = await response.json();
+        setReviews(p => p.map(r => r.review_id === rid ? updatedReview : r));
+      } catch (err) { showToast("Error updating review: " + err.message, "error"); return; }
+    } else {
+      setReviews(p => p.map(r => r.review_id === rid ? { ...r, rating: nr, review_text: nt } : r));
+    }
+    showToast("Review updated!");
+  };
 
   const enrichedCocktails = useMemo(() => cocktails.map(c => { const lr = reviews.filter(r => r.cocktail_id === c.cocktail_id); const ar = lr.length ? (lr.reduce((s, r) => s + r.rating, 0) / lr.length) : null; return { ...c, reviews: lr, avgRating: ar }; }), [cocktails, reviews]);
   const filteredCocktails = useMemo(() => { let res = [...enrichedCocktails]; if (searchQuery) { const q = searchQuery.toLowerCase(); res = res.filter(c => c.cocktail_name.toLowerCase().includes(q) || c.cocktail_description.toLowerCase().includes(q) || c.ingredients.some(i => i.name.toLowerCase().includes(q))); } if (filterFlavors.length > 0) res = res.filter(c => filterFlavors.every(fId => c.flavors.some(f => f.flavor_id === fId))); if (filterDifficulty) res = res.filter(c => c.recipe.difficulty === filterDifficulty); if (filterLiquor.length > 0) res = res.filter(c => filterLiquor.some(liq => c.ingredients.some(i => i.type === "Spirit" && i.name === liq))); if (filterIngCount === "few") res.sort((a, b) => a.ingredients.length - b.ingredients.length); else if (filterIngCount === "most") res.sort((a, b) => b.ingredients.length - a.ingredients.length); if (sortBy === "name") res.sort((a, b) => a.cocktail_name.localeCompare(b.cocktail_name)); else if (sortBy === "rating") res.sort((a, b) => (b.avgRating || 0) - (a.avgRating || 0)); else if (sortBy === "difficulty") res.sort((a, b) => a.recipe.difficulty.localeCompare(b.recipe.difficulty)); return res; }, [enrichedCocktails, searchQuery, filterFlavors, filterDifficulty, filterLiquor, filterIngCount, sortBy]);
 
   const selectedCocktail = enrichedCocktails.find(c => c.cocktail_id === selectedCocktailId);
-  const spirits = DB.ingredient.filter(i => i.ingred_type_id === 1).map(i => i.ingredient_name);
+  const spirits = useMemo(() => {
+    const names = new Set();
+    enrichedCocktails.forEach(c => c.ingredients?.forEach(i => { if (i.type === "Spirit") names.add(i.name); }));
+    return names.size > 0 ? [...names].sort() : DB.ingredient.filter(i => i.ingred_type_id === 1).map(i => i.ingredient_name);
+  }, [enrichedCocktails]);
   const favCocktails = currentUser ? enrichedCocktails.filter(c => favorites.some(f => f.user_id === currentUser.user_id && f.cocktail_id === c.cocktail_id)) : [];
   const userRevs = currentUser ? reviews.filter(r => r.user_id === currentUser.user_id) : [];
   const clearFilters = () => { setFilterFlavors([]); setFilterDifficulty(""); setFilterLiquor([]); setFilterIngCount(""); };
@@ -556,7 +716,7 @@ export default function MixMasterApp() {
         * { box-sizing: border-box; }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: ${NEON.violet}40; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb { background: ${NEON.gold5}40; border-radius: 3px; }
         input::placeholder, textarea::placeholder { color: ${NEON.textMuted}; }
       `}</style>
       <NeonBackground />
@@ -564,7 +724,7 @@ export default function MixMasterApp() {
       <header style={{ padding: "14px 32px", display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: `1px solid ${NEON.borderNeon}`, background: `linear-gradient(180deg, ${NEON.bgOverlay}, rgba(10,10,20,0.85))`, backdropFilter: "blur(20px)", position: "sticky", top: 0, zIndex: 100, boxShadow: `0 4px 30px rgba(0,0,0,0.4), 0 1px 0 ${NEON.violet}15` }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }} onClick={() => { setPage("home"); setSelectedCocktailId(null); }}>
           <span style={{ fontSize: 30, filter: `drop-shadow(0 0 8px ${NEON.magenta}80)` }}>🍸</span>
-          <h1 style={{ margin: 0, fontSize: 28, fontWeight: 800, fontFamily: "'Playfair Display', serif", background: `linear-gradient(135deg, ${NEON.cyan}, ${NEON.magenta}, ${NEON.amber})`, backgroundSize: "200% 100%", animation: "shimmer 6s ease infinite", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>MixMaster</h1>
+          <h1 style={{ margin: 0, fontSize: 28, fontWeight: 800, fontFamily: "'Playfair Display', serif", background: `linear-gradient(135deg, ${NEON.gold1} 0%, ${NEON.gold2} 25%, ${NEON.gold3} 50%, ${NEON.gold4} 75%, ${NEON.gold5} 100%)`, backgroundSize: "200% 100%", animation: "shimmer 6s ease infinite", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", filter: "drop-shadow(0 0 6px rgba(191,149,63,0.3))" }}>MixMaster</h1>
         </div>
         <nav style={{ display: "flex", alignItems: "center", gap: 6 }}>
           {[{ id: "home", label: "Browse", icon: <Search size={14} /> }, { id: "analytics", label: "Analytics", icon: <BarChart3 size={14} /> }, ...(currentUser ? [{ id: "favorites", label: "Favorites", icon: <Heart size={14} /> }, { id: "myreviews", label: "My Reviews", icon: <MessageSquare size={14} /> }] : [])].map(item => (
@@ -573,7 +733,7 @@ export default function MixMasterApp() {
           <div style={{ width: 1, height: 24, background: NEON.borderNeon, margin: "0 8px" }} />
           {currentUser ? (
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <span style={{ fontSize: 13, color: NEON.violetSoft, display: "flex", alignItems: "center", gap: 4 }}><User size={14} /> {currentUser.username}</span>
+              <span style={{ fontSize: 13, color: NEON.gold2, display: "flex", alignItems: "center", gap: 4 }}><User size={14} /> {currentUser.username}</span>
               <button onClick={handleLogout} style={{ background: `${NEON.magenta}10`, border: `1px solid ${NEON.magenta}25`, color: NEON.magenta, padding: "8px 15px", borderRadius: 12, cursor: "pointer", fontSize: 13, fontFamily: "'Outfit', sans-serif", display: "flex", alignItems: "center", gap: 5 }}><LogOut size={14} /> Sign Out</button>
             </div>
           ) : (
@@ -586,8 +746,8 @@ export default function MixMasterApp() {
         {page === "home" && !selectedCocktailId && (
           <div style={{ animation: "fadeIn 0.3s ease-out" }}>
             <div style={{ textAlign: "center", padding: "48px 0 36px" }}>
-              <h2 style={{ fontSize: 46, fontWeight: 800, margin: "0 0 14px", fontFamily: "'Playfair Display', serif", background: `linear-gradient(135deg, ${NEON.cyan} 0%, ${NEON.magenta} 40%, ${NEON.amber} 80%, ${NEON.cyan} 100%)`, backgroundSize: "300% 100%", animation: "shimmer 5s ease infinite", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Discover Your Next Cocktail</h2>
-              <p style={{ fontSize: 16, color: NEON.textSecondary, maxWidth: 520, margin: "0 auto" }}>From timeless classics to adventurous new mixes — search, sip, and savor.</p>
+              <h2 style={{ fontSize: 46, fontWeight: 800, margin: "0 0 14px", fontFamily: "'Playfair Display', serif", background: `linear-gradient(135deg, ${NEON.gold1} 0%, ${NEON.gold2} 20%, ${NEON.gold3} 40%, ${NEON.gold4} 60%, ${NEON.gold5} 80%, ${NEON.gold2} 100%)`, backgroundSize: "300% 100%", animation: "shimmer 5s ease infinite", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", filter: "drop-shadow(0 0 8px rgba(191,149,63,0.25))" }}>Discover Your Next Cocktail</h2>
+              <p style={{ fontSize: 16, background: `linear-gradient(90deg, ${NEON.gold1}, ${NEON.gold2}, ${NEON.gold3}, ${NEON.gold4})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", maxWidth: 520, margin: "0 auto", filter: "drop-shadow(0 0 4px rgba(191,149,63,0.15))" }}>From timeless classics to adventurous new mixes — search, sip, and savor.</p>
               <div style={{ marginTop: 14, display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 12px", borderRadius: 999, fontSize: 12, background: dataSource === "api" ? `${NEON.cyan}12` : `${NEON.amber}12`, color: dataSource === "api" ? NEON.cyan : NEON.amber, border: `1px solid ${dataSource === "api" ? NEON.cyan + "30" : NEON.amber + "30"}` }}>
                 <span>{dataSource === "api" ? "🟢" : "🟡"}</span>
                 {dataSource === "api" ? "Connected to localhost FastAPI + MySQL" : "Demo mode until backend is running"}
@@ -622,17 +782,17 @@ export default function MixMasterApp() {
             {filteredCocktails.length === 0 && <div style={{ textAlign: "center", padding: "60px 0", color: NEON.textMuted }}><div style={{ fontSize: 48, marginBottom: 12 }}>🔍</div><div style={{ fontSize: 16 }}>No cocktails match your filters</div><button onClick={() => { setSearchQuery(""); clearFilters(); }} style={{ marginTop: 12, background: `${NEON.cyan}10`, border: `1px solid ${NEON.cyan}25`, color: NEON.cyan, padding: "8px 20px", borderRadius: 10, cursor: "pointer", fontSize: 13, fontFamily: "'Outfit', sans-serif" }}>Clear all filters</button></div>}
           </div>
         )}
-        {page === "home" && selectedCocktailId && selectedCocktail && <CocktailDetail cocktail={selectedCocktail} onBack={() => setSelectedCocktailId(null)} currentUser={currentUser} onToggleFavorite={() => toggleFav(selectedCocktailId)} isFavorited={isFav(selectedCocktailId)} reviews={reviews.filter(r => r.cocktail_id === selectedCocktailId)} onSubmitReview={submitReview} onDeleteReview={deleteReview} onEditReview={editReview} toast={showToast} />}
+        {page === "home" && selectedCocktailId && selectedCocktail && <CocktailDetail cocktail={selectedCocktail} onBack={() => setSelectedCocktailId(null)} currentUser={currentUser} onToggleFavorite={() => toggleFav(selectedCocktailId)} isFavorited={isFav(selectedCocktailId)} reviews={reviews.filter(r => r.cocktail_id === selectedCocktailId)} onSubmitReview={submitReview} onDeleteReview={deleteReview} onEditReview={editReview} toast={showToast} users={users} />}
         {page === "favorites" && (
           <div style={{ animation: "fadeIn 0.3s ease-out" }}>
-            <h2 style={{ fontSize: 30, fontWeight: 700, margin: "0 0 8px", fontFamily: "'Playfair Display', serif", background: `linear-gradient(135deg, ${NEON.magenta}, ${NEON.amber})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>❤️ Your Favorites</h2>
+            <h2 style={{ fontSize: 30, fontWeight: 700, margin: "0 0 8px", fontFamily: "'Playfair Display', serif", background: `linear-gradient(135deg, ${NEON.gold1}, ${NEON.gold2}, ${NEON.gold5})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>❤️ Your Favorites</h2>
             <p style={{ fontSize: 14, color: NEON.textMuted, margin: "0 0 24px" }}>{favCocktails.length} cocktail{favCocktails.length !== 1 ? "s" : ""} saved</p>
             {favCocktails.length === 0 ? <div style={{ textAlign: "center", padding: "60px 0", color: NEON.textMuted }}><div style={{ fontSize: 48, marginBottom: 12 }}>💔</div><div>No favorites yet. Browse cocktails and tap the heart!</div></div> : <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(270px, 1fr))", gap: 22 }}>{favCocktails.map((c, i) => (<CocktailCard key={c.cocktail_id} cocktail={c} index={i} onClick={() => { setSelectedCocktailId(c.cocktail_id); setPage("home"); }} isFavorited={true} onToggleFavorite={() => toggleFav(c.cocktail_id)} currentUser={currentUser} />))}</div>}
           </div>
         )}
         {page === "myreviews" && (
           <div style={{ animation: "fadeIn 0.3s ease-out" }}>
-            <h2 style={{ fontSize: 30, fontWeight: 700, margin: "0 0 8px", fontFamily: "'Playfair Display', serif", background: `linear-gradient(135deg, ${NEON.cyan}, ${NEON.violet})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>💬 My Reviews</h2>
+            <h2 style={{ fontSize: 30, fontWeight: 700, margin: "0 0 8px", fontFamily: "'Playfair Display', serif", background: `linear-gradient(135deg, ${NEON.gold1}, ${NEON.gold2}, ${NEON.gold3})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>💬 My Reviews</h2>
             <p style={{ fontSize: 14, color: NEON.textMuted, margin: "0 0 24px" }}>{userRevs.length} review{userRevs.length !== 1 ? "s" : ""} written</p>
             {userRevs.length === 0 ? <div style={{ textAlign: "center", padding: "60px 0", color: NEON.textMuted }}><div style={{ fontSize: 48, marginBottom: 12 }}>✍️</div><div>You haven't written any reviews yet.</div></div> : (
               <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
@@ -649,7 +809,7 @@ export default function MixMasterApp() {
         )}
         {page === "analytics" && (
           <div style={{ animation: "fadeIn 0.3s ease-out" }}>
-            <h2 style={{ fontSize: 30, fontWeight: 700, margin: "0 0 8px", fontFamily: "'Playfair Display', serif", background: `linear-gradient(135deg, ${NEON.amber}, ${NEON.cyan})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>📊 MixMaster Analytics</h2>
+            <h2 style={{ fontSize: 30, fontWeight: 700, margin: "0 0 8px", fontFamily: "'Playfair Display', serif", background: `linear-gradient(135deg, ${NEON.gold1}, ${NEON.gold2}, ${NEON.gold5})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>📊 MixMaster Analytics</h2>
             <p style={{ fontSize: 14, color: NEON.textMuted, margin: "0 0 24px" }}>Data-driven insights across our cocktail collection</p>
             <AnalyticsDashboard cocktails={enrichedCocktails} />
           </div>
@@ -657,7 +817,7 @@ export default function MixMasterApp() {
       </main>
 
       <footer style={{ borderTop: `1px solid ${NEON.borderNeon}`, padding: "20px 32px", textAlign: "center", fontSize: 12, color: NEON.textMuted, position: "relative", zIndex: 1, background: `linear-gradient(180deg, transparent, ${NEON.bg}80)` }}>
-        <span style={{ fontFamily: "'Playfair Display', serif", background: `linear-gradient(135deg, ${NEON.cyan}, ${NEON.magenta})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>MixMaster</span>
+        <span style={{ fontFamily: "'Playfair Display', serif", background: `linear-gradient(135deg, ${NEON.gold1}, ${NEON.gold2}, ${NEON.gold5})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>MixMaster</span>
         {" "} — CS5200 Database Management Systems · Northeastern University · PhamJHadawleS · 2026
       </footer>
 

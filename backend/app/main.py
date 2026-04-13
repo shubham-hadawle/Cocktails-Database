@@ -1,11 +1,46 @@
 from collections import defaultdict
 from typing import Any
+from datetime import datetime
+from pydantic import BaseModel
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 
 from .db import engine
+
+
+# ── Pydantic request models ──────────────────────────────────
+
+class ReviewRequest(BaseModel):
+    cocktail_id: int
+    user_id: int
+    rating: float
+    review_text: str
+
+
+class ReviewUpdate(BaseModel):
+    rating: float
+    review_text: str
+
+
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+
+
+class RegisterRequest(BaseModel):
+    username: str
+    email: str
+    password: str
+
+
+class FavoriteRequest(BaseModel):
+    user_id: int
+    cocktail_id: int
+
+
+# ── App setup ────────────────────────────────────────────────
 
 app = FastAPI(title='MixMaster API', version='1.0.0')
 
@@ -22,6 +57,8 @@ app.add_middleware(
     allow_headers=['*'],
 )
 
+
+# ── Helpers ──────────────────────────────────────────────────
 
 def _rows_to_dicts(result) -> list[dict[str, Any]]:
     return [dict(row._mapping) for row in result]
@@ -177,12 +214,16 @@ def _load_cocktails() -> list[dict[str, Any]]:
     return payload
 
 
+# ── Health ───────────────────────────────────────────────────
+
 @app.get('/health')
 def healthcheck() -> dict[str, str]:
     with engine.connect() as conn:
         conn.execute(text('SELECT 1'))
     return {'status': 'ok'}
 
+
+# ── Cocktails ────────────────────────────────────────────────
 
 @app.get('/api/cocktails')
 def get_cocktails(q: str | None = Query(default=None)) -> list[dict[str, Any]]:
@@ -208,6 +249,8 @@ def get_cocktail(cocktail_id: int) -> dict[str, Any]:
     raise HTTPException(status_code=404, detail='Cocktail not found')
 
 
+# ── Analytics ────────────────────────────────────────────────
+
 @app.get('/api/analytics/summary')
 def get_summary() -> dict[str, Any]:
     cocktails = _load_cocktails()
@@ -217,3 +260,269 @@ def get_summary() -> dict[str, Any]:
         'review_count': sum(len(c['reviews']) for c in cocktails),
         'average_rating': round(sum(avg_rating_values) / len(avg_rating_values), 2) if avg_rating_values else None,
     }
+
+
+# ── Reviews (CRUD) ───────────────────────────────────────────
+
+@app.post('/api/reviews')
+def create_review(review: ReviewRequest) -> dict[str, Any]:
+    """Create — submit a new review for a cocktail."""
+    try:
+        with engine.begin() as conn:
+            result = conn.execute(
+                text('SELECT cocktail_id FROM cocktail WHERE cocktail_id = :cid'),
+                {'cid': review.cocktail_id}
+            ).fetchone()
+            if not result:
+                raise HTTPException(status_code=404, detail='Cocktail not found')
+
+            result = conn.execute(
+                text('SELECT user_id FROM app_user WHERE user_id = :uid'),
+                {'uid': review.user_id}
+            ).fetchone()
+            if not result:
+                raise HTTPException(status_code=404, detail='User not found')
+
+            existing = conn.execute(
+                text('''SELECT review_id FROM review
+                       WHERE cocktail_id = :cid AND user_id = :uid'''),
+                {'cid': review.cocktail_id, 'uid': review.user_id}
+            ).fetchone()
+            if existing:
+                raise HTTPException(status_code=400, detail='You have already reviewed this cocktail')
+
+            current_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            conn.execute(
+                text('''INSERT INTO review (cocktail_id, user_id, rating, review_text, created_at)
+                       VALUES (:cid, :uid, :rating, :text, :date)'''),
+                {
+                    'cid': review.cocktail_id,
+                    'uid': review.user_id,
+                    'rating': review.rating,
+                    'text': review.review_text,
+                    'date': current_date,
+                }
+            )
+
+            result = conn.execute(
+                text('''SELECT review_id, cocktail_id, user_id, rating, review_text, created_at
+                       FROM review
+                       WHERE cocktail_id = :cid AND user_id = :uid
+                       ORDER BY created_at DESC LIMIT 1'''),
+                {'cid': review.cocktail_id, 'uid': review.user_id}
+            ).fetchone()
+
+            if result:
+                row = dict(result._mapping)
+                row['rating'] = float(row['rating'])
+                row['created_at'] = str(row['created_at'])
+                return row
+            raise HTTPException(status_code=400, detail='Failed to create review')
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.put('/api/reviews/{review_id}')
+def update_review(review_id: int, update: ReviewUpdate) -> dict[str, Any]:
+    """Update — edit an existing review."""
+    try:
+        with engine.begin() as conn:
+            result = conn.execute(
+                text('SELECT review_id FROM review WHERE review_id = :rid'),
+                {'rid': review_id}
+            ).fetchone()
+            if not result:
+                raise HTTPException(status_code=404, detail='Review not found')
+
+            conn.execute(
+                text('''UPDATE review
+                       SET rating = :rating, review_text = :text
+                       WHERE review_id = :rid'''),
+                {'rid': review_id, 'rating': update.rating, 'text': update.review_text}
+            )
+
+            result = conn.execute(
+                text('''SELECT review_id, cocktail_id, user_id, rating, review_text, created_at
+                       FROM review WHERE review_id = :rid'''),
+                {'rid': review_id}
+            ).fetchone()
+
+            row = dict(result._mapping)
+            row['rating'] = float(row['rating'])
+            row['created_at'] = str(row['created_at'])
+            return row
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.delete('/api/reviews/{review_id}')
+def delete_review(review_id: int) -> dict[str, str]:
+    """Delete — remove a review."""
+    try:
+        with engine.begin() as conn:
+            result = conn.execute(
+                text('SELECT review_id FROM review WHERE review_id = :rid'),
+                {'rid': review_id}
+            ).fetchone()
+            if not result:
+                raise HTTPException(status_code=404, detail='Review not found')
+
+            conn.execute(
+                text('DELETE FROM review WHERE review_id = :rid'),
+                {'rid': review_id}
+            )
+            return {'message': 'Review deleted successfully'}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ── Auth (login / register) ─────────────────────────────────
+
+@app.post('/api/auth/login')
+def login(req: LoginRequest) -> dict[str, Any]:
+    """Authenticate a user by username + password."""
+    with engine.begin() as conn:
+        result = conn.execute(
+            text('''SELECT user_id, username, email, password_hash, created_at
+                   FROM app_user
+                   WHERE username = :u AND password_hash = :p'''),
+            {'u': req.username, 'p': req.password}
+        ).fetchone()
+
+        if not result:
+            raise HTTPException(status_code=401, detail='Invalid username or password')
+
+        row = dict(result._mapping)
+        row['created_at'] = str(row['created_at'])
+        return row
+
+
+@app.post('/api/auth/register')
+def register(req: RegisterRequest) -> dict[str, Any]:
+    """Create a new user account."""
+    try:
+        with engine.begin() as conn:
+            existing = conn.execute(
+                text('''SELECT user_id FROM app_user
+                       WHERE username = :u OR email = :e'''),
+                {'u': req.username, 'e': req.email}
+            ).fetchone()
+            if existing:
+                raise HTTPException(status_code=400, detail='Username or email already taken')
+
+            conn.execute(
+                text('''INSERT INTO app_user (username, email, password_hash)
+                       VALUES (:u, :e, :p)'''),
+                {'u': req.username, 'e': req.email, 'p': req.password}
+            )
+
+            result = conn.execute(
+                text('''SELECT user_id, username, email, password_hash, created_at
+                       FROM app_user WHERE username = :u'''),
+                {'u': req.username}
+            ).fetchone()
+
+            row = dict(result._mapping)
+            row['created_at'] = str(row['created_at'])
+            return row
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ── Favorites (CRUD) ────────────────────────────────────────
+
+@app.get('/api/favorites/{user_id}')
+def get_favorites(user_id: int) -> list[dict[str, Any]]:
+    """Read — get all favorites for a user."""
+    with engine.begin() as conn:
+        rows = _rows_to_dicts(
+            conn.execute(
+                text('''SELECT favorite_id, user_id, cocktail_id
+                       FROM user_favorite WHERE user_id = :uid'''),
+                {'uid': user_id}
+            )
+        )
+    return rows
+
+
+@app.post('/api/favorites')
+def add_favorite(req: FavoriteRequest) -> dict[str, Any]:
+    """Create — add a cocktail to the user's favorites."""
+    try:
+        with engine.begin() as conn:
+            existing = conn.execute(
+                text('''SELECT favorite_id FROM user_favorite
+                       WHERE user_id = :uid AND cocktail_id = :cid'''),
+                {'uid': req.user_id, 'cid': req.cocktail_id}
+            ).fetchone()
+            if existing:
+                raise HTTPException(status_code=400, detail='Already in favorites')
+
+            conn.execute(
+                text('''INSERT INTO user_favorite (user_id, cocktail_id)
+                       VALUES (:uid, :cid)'''),
+                {'uid': req.user_id, 'cid': req.cocktail_id}
+            )
+
+            result = conn.execute(
+                text('''SELECT favorite_id, user_id, cocktail_id
+                       FROM user_favorite
+                       WHERE user_id = :uid AND cocktail_id = :cid'''),
+                {'uid': req.user_id, 'cid': req.cocktail_id}
+            ).fetchone()
+
+            return dict(result._mapping)
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.delete('/api/favorites/{user_id}/{cocktail_id}')
+def remove_favorite(user_id: int, cocktail_id: int) -> dict[str, str]:
+    """Delete — remove a cocktail from the user's favorites."""
+    try:
+        with engine.begin() as conn:
+            existing = conn.execute(
+                text('''SELECT favorite_id FROM user_favorite
+                       WHERE user_id = :uid AND cocktail_id = :cid'''),
+                {'uid': user_id, 'cid': cocktail_id}
+            ).fetchone()
+            if not existing:
+                raise HTTPException(status_code=404, detail='Favorite not found')
+
+            conn.execute(
+                text('''DELETE FROM user_favorite
+                       WHERE user_id = :uid AND cocktail_id = :cid'''),
+                {'uid': user_id, 'cid': cocktail_id}
+            )
+            return {'message': 'Removed from favorites'}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ── Users (read-only, for review display) ────────────────────
+
+@app.get('/api/users')
+def get_users() -> list[dict[str, Any]]:
+    """Read all users (for displaying reviewer names)."""
+    with engine.begin() as conn:
+        rows = _rows_to_dicts(
+            conn.execute(
+                text('''SELECT user_id, username, email, created_at
+                       FROM app_user ORDER BY username''')
+            )
+        )
+    for row in rows:
+        row['created_at'] = str(row['created_at'])
+    return rows
