@@ -44,10 +44,9 @@ Make sure you have these installed before starting:
 
 - **Python 3.10+** → [python.org/downloads](https://www.python.org/downloads/)
 - **Node.js 18+** → [nodejs.org](https://nodejs.org/)
+- **MySQL 8.0** (recommended) → [dev.mysql.com/downloads/installer](https://dev.mysql.com/downloads/installer/)
+- **Docker Desktop** → [docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop/) 
 
-- **Docker Desktop** → [docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop/) (recommended)
-
-- **MySQL 8.0** (if not using Docker) → [dev.mysql.com/downloads/installer](https://dev.mysql.com/downloads/installer/)
 
 To verify they're installed, run in your terminal:
 
